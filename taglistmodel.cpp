@@ -55,7 +55,17 @@ bool TagListModel::insertRows(int row, int count,
     //c'est dans la doc de faire ça
     emit beginInsertRows(parent, row, row+count);
     //et voilà ce qu'on fait vraiment
-    m_tags->append(new Tag("New Tag"));
+    Tag *n_tag = new Tag("New Tag");
+    n_tag->setBulletColor(QColor(0,0,0));
+    // couleurs :   orange :    253,148,38
+    //              jaune :     254,203,47
+    //              vert :      104,216,69
+    //              belu :      42,174,245
+    //              violet :    203,119,223
+    //              gris :      142,142,145
+    //              rouge :     252,61,57
+    m_tags->append(n_tag);
+
     //c'est dans la doc de faire ça
     emit endInsertRows();
     return true;

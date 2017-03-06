@@ -3,7 +3,6 @@
 Tag::Tag(QString tagName)
                     : QList<TagFile *>() {
     m_tagName = tagName;
-    m_color = QColor(0, 0, 0);
     m_bullet = QPixmap(100, 100);
 }
 
