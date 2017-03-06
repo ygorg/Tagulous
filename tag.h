@@ -8,6 +8,9 @@
 #include <QDebug>
 #include <QMimeData>
 
+#include <QPixmap>
+#include <QPainter>
+
 class TagFile : public QObject {
 /* Représente un fichier dans un Tag
  * On sait jamais si il faudra des membres
@@ -32,15 +35,30 @@ class Tag : public QList<TagFile *> {
 private:
     QString m_tagName;
     QColor m_color;
-
+    QPixmap m_bullet;
 public:
     explicit Tag(QString tagName) : QList<TagFile *>() {
         m_tagName = tagName;
         m_color = QColor(0, 0, 0);
+        m_bullet = QPixmap(100, 100);
     }
 
-    void setColor(QColor color) {
+    void setBulletColor(QColor color) {
         this->m_color = color;
+        m_bullet.fill(QColor(0, 0, 0, 0));
+
+        QPainter *paint = new QPainter(&m_bullet);
+        m_bullet.setDevicePixelRatio(2);
+        QPen pen;
+        pen.setColor(m_color);
+        pen.setWidth(10);
+        paint->setPen(pen);
+        paint->setBrush(m_color.lighter(110));
+        paint->drawEllipse(QPoint(m_bullet.width()/2, m_bullet.height()/2), 45, 45);
+    }
+
+    QPixmap getBullet() {
+        return m_bullet.scaled(30, 30);
     }
 
     QString getName() {
@@ -80,6 +98,10 @@ public:
          * Qt::DisplayFont (en vrai pas du tout mais c'est l'idée)*/
         if (role == Qt::DisplayRole) {
             return m_tags->at(index.row())->getName();
+        } else if (role == Qt::DecorationRole) {
+            return m_tags->at(index.row())->getBullet();
+        } else if (role == Qt::SizeHintRole) {
+            return QSize(10, 30);
         }
         return QVariant(); /* La valeur par défaut */
     }
