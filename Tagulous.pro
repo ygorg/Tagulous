@@ -25,7 +25,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
         mainwindow.cpp\
-        tag.cpp
+        tag.cpp \
+    taglistmodel.cpp \
+    tagfile.cpp
 
 HEADERS  += mainwindow.h\
-            tag.h
+            tag.h \
+    taglistmodel.h \
+    tagfile.h

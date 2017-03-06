@@ -16,6 +16,7 @@
 #include <QVBoxLayout>
 
 #include "tag.h"
+#include "taglistmodel.h"
 
 class MainWindow : public QMainWindow
 {

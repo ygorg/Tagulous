@@ -4,7 +4,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
     tagList = new QList<Tag *>();
-    tagListModel = new TagListModel(tagList);
+    tagListModel = new TagListModel(tagList, 0);
 
     Tag *tag = new Tag("Tag1");
     tag->setBulletColor(QColor(252, 61, 57));
@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     listView->setDropIndicatorShown(true);
     listView->setAttribute(Qt::WA_MacShowFocusRect, false);
 
-    QPushButton *btn = new QPushButton(tr("Add tag"), this);
+    QPushButton *btn = new QPushButton(tr("Nouveau tag"), this);
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(listView);
