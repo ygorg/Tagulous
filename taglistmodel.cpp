@@ -105,6 +105,21 @@ QStringList TagListModel::mimeTypes() const {
     return qstrList;
 }
 
+bool TagListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action,
+                  int row, int column, const QModelIndex &parent) const {
+    Q_UNUSED(action)
+
+    if (data->formats().contains("application/x-qt-mime-type-name")) {
+        /* This a tag we want to move */
+        return parent.row() == -1 && parent.column() == -1;
+    } else {
+        /* This is a uri-list */
+        return row == -1 && column == -1;
+    }
+
+    return false;
+}
+
 bool TagListModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
                   int row, int column, const QModelIndex &parent) {
     /*que faire si des données sont droppés*/
