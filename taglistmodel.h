@@ -33,6 +33,10 @@ public:
     QStringList mimeTypes() const override;
     bool dropMimeData(const QMimeData *data, Qt::DropAction action,
                       int row, int column, const QModelIndex &parent) override;
+
+    /* For test purpose */
+    void init(); /* Initialises the model with false values */
+
 public slots:
     void requestedAddTag();
 signals:

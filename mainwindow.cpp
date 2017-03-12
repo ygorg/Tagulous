@@ -5,18 +5,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     tagList = new QList<Tag *>();
     tagListModel = new TagListModel(tagList, 0);
-
-    Tag *tag = new Tag("Tag1");
-    tag->setBulletColor(QColor(252, 61, 57));
-    tagList->append(tag);
-
-    tag = new Tag("Tag2");
-    tag->setBulletColor(QColor(104, 216, 69));
-    tagList->append(tag);
-
-    tag = new Tag("Tag3");
-    tag->setBulletColor(QColor(42, 174, 245));
-    tagList->append(tag);
+    tagListModel->init();
 
 
     listView = new QListView();

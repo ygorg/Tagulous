@@ -141,3 +141,17 @@ bool TagListModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
 void TagListModel::requestedAddTag() {
     insertRow(rowCount(QModelIndex()));
 }
+
+void TagListModel::init() {
+    Tag *tag = new Tag("Tag1");
+    tag->setBulletColor(QColor(252, 61, 57));
+    m_tags->append(tag);
+
+    tag = new Tag("Tag2");
+    tag->setBulletColor(QColor(104, 216, 69));
+    m_tags->append(tag);
+
+    tag = new Tag("Tag3");
+    tag->setBulletColor(QColor(42, 174, 245));
+    m_tags->append(tag);
+}
