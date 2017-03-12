@@ -44,6 +44,21 @@ bool TagListModel::setData(const QModelIndex &index,
 
 bool TagListModel::insertRows(int row, int count,
                               const QModelIndex &parent) {
+    // couleurs :   orange :    253,148,38
+    //              jaune :     254,203,47
+    //              vert :      104,216,69
+    //              belu :      42,174,245
+    //              violet :    203,119,223
+    //              gris :      142,142,145
+    //              rouge :     252,61,57
+    static QColor defaultColors[] =
+            {QColor(253,148,38), QColor(254,203,47), QColor(104,216,69),
+            QColor(42,174,245), QColor(203,119,223), QColor(142,142,145),
+            QColor(252,61,57)};
+    static int defaultColorsIndex = 0;
+    static int defaultColorsLength = 7;
+
+
     /* Ce qui se passe si on ajoute count ligne a l'indice row */
     if (row != rowCount(QModelIndex())) {
         /* Si on veut ajouter une ligne pas a la fin on abort */
@@ -57,14 +72,9 @@ bool TagListModel::insertRows(int row, int count,
     emit beginInsertRows(parent, row, row+count);
     //et voilà ce qu'on fait vraiment
     Tag *n_tag = new Tag("New Tag");
-    n_tag->setBulletColor(QColor(0,0,0));
-    // couleurs :   orange :    253,148,38
-    //              jaune :     254,203,47
-    //              vert :      104,216,69
-    //              belu :      42,174,245
-    //              violet :    203,119,223
-    //              gris :      142,142,145
-    //              rouge :     252,61,57
+    n_tag->setBulletColor(defaultColors[defaultColorsIndex]);
+    defaultColorsIndex = (defaultColorsIndex + 1) % defaultColorsLength;
+
     m_tags->append(n_tag);
 
     //c'est dans la doc de faire ça
