@@ -36,6 +36,7 @@ bool TagListModel::setData(const QModelIndex &index,
         /* en gros si on modifie le nom d'un tag et qu'on le met a ""
          * ben on fait rien */
         m_tags->at(index.row())->setName(value.toString());
+        emit dataChanged(index, index);
         return true;
     }
     return false; /* On a pas modifié la valeur */
