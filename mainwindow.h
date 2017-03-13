@@ -16,10 +16,10 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 private:
-    QList<Tag *> *tagList;
+    TagList *tagList;
     TagListModel *tagListModel;
-    QListView *listView;
 
+    QListView *listView;
     QListView *listView2;
 
     bool sideBarIsShown = true;

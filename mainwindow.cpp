@@ -3,10 +3,23 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-    tagList = new QList<Tag *>();
-    tagListModel = new TagListModel(tagList, 0);
-    tagListModel->init();
 
+    tagList = new TagList;
+
+    QFile file(path + "/" + fileName);
+    QString data;
+    if (file.open(QIODevice::ReadOnly))
+    {
+        QXmlStreamReader *reader = new QXmlStreamReader(&file);
+        tagList->fromXML(reader);
+        file.close();
+        qDebug() << path + "/" + fileName;
+    } else {
+        tagList->init();
+        qDebug() << "Unable to load the data.";
+    }
+
+    tagListModel = new TagListModel(tagList, 0);
 
     listView = new QListView();
     listView->setModel(tagListModel);
@@ -55,8 +68,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setCentralWidget(new QWidget);
     centralWidget()->setLayout(layout);
-
-
 
 }
 
