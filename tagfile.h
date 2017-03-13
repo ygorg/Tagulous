@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QString>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 class TagFile : public QObject {
     /* Représente un fichier dans un Tag
@@ -14,6 +16,7 @@ class TagFile : public QObject {
     public:
         explicit TagFile(QString filePath);
         QString getPath();
+        QMimeType getMimeType();
 
 };
 
