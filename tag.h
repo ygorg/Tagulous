@@ -21,6 +21,7 @@ public:
     explicit Tag(QString tagName);
     void setBulletColor(QColor color);
     QPixmap getBullet();
+    QColor getColor();
     QString getName();
     void setName(QString value);
 };
