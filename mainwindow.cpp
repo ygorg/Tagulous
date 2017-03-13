@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     QToolBar *toolbar_ = new QToolBar(this);
-    //setUnifiedTitleAndToolBarOnMac(true);
+    setUnifiedTitleAndToolBarOnMac(true);
 
     toolbar_->setMovable(false);
     toolbar_->setFloatable(false);

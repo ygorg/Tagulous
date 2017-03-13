@@ -19,6 +19,7 @@
 
 #include "tag.h"
 #include "taglistmodel.h"
+#include "filelistmodel.h"
 
 class MainWindow : public QMainWindow
 {

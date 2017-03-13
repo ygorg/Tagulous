@@ -4,6 +4,7 @@
 #include <QColor>
 #include <QString>
 #include <QList>
+#include <QIcon>
 #include <QAbstractListModel>
 #include <QDebug>
 #include <QMimeData>
@@ -18,9 +19,13 @@ class TagFile : public QObject {
       Q_OBJECT
     private:
         QString m_filePath;
+        QString name;
+        QIcon icon;
     public:
         explicit TagFile(QString filePath);
         QString getPath();
+        QString getName();
+        QIcon getIcon();
 
 };
 
