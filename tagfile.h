@@ -1,15 +1,8 @@
 #ifndef TAGFILE_H
 #define TAGFILE_H
 
-#include <QColor>
+#include <QObject>
 #include <QString>
-#include <QList>
-#include <QAbstractListModel>
-#include <QDebug>
-#include <QMimeData>
-
-#include <QPixmap>
-#include <QPainter>
 
 class TagFile : public QObject {
     /* Représente un fichier dans un Tag

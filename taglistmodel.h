@@ -1,17 +1,15 @@
 #ifndef TAGLISTMODEL_H
 #define TAGLISTMODEL_H
 
-#include <QColor>
-#include <QString>
-#include <QList>
 #include <QAbstractListModel>
-#include <QDebug>
+#include <QList>
+#include <QAction>
+#include <QToolBar>
+#include <QHBoxLayout>
 #include <QMimeData>
+#include <QDebug>
 
-#include <QPixmap>
-#include <QPainter>
-
-#include "tag.h"
+#include "taglist.h"
 
 class TagListModel : public QAbstractListModel {
 /* Un modele qui fait l'interface entre une liste de Tag

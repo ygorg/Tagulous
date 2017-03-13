@@ -1,17 +1,14 @@
 #ifndef TAG_H
 #define TAG_H
 
+#include <QList>
 #include <QColor>
 #include <QString>
-#include <QList>
-#include <QAbstractListModel>
-#include <QDebug>
-#include <QMimeData>
-
 #include <QPixmap>
+#include <QPen>
 #include <QPainter>
 
-#include "TagFile.h"
+#include "tagfile.h"
 
 class Tag : public QList<TagFile *> {
 /* Un tag c'est avant tout une liste de fichier

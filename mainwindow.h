@@ -2,22 +2,13 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QLabel>
-#include <QPainter>
 #include <QListView>
-#include <QStringListModel>
-#include <QStringList>
-#include <QListWidget>
-#include <QMessageBox>
-#include <QDropEvent>
-#include <QDragEnterEvent>
-#include <QMimeData>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QToolBar>
+#include <QString>
+#include <QStandardPaths>
+#include <QDir>
+#include <QDebug>
 
-
-#include "tag.h"
+#include "taglist.h"
 #include "taglistmodel.h"
 
 class MainWindow : public QMainWindow
