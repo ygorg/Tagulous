@@ -68,3 +68,20 @@ void MainWindow::toggleSideBar() {
         listView2->hide();
     }
 }
+
+MainWindow::~MainWindow() {
+
+    QDir d;
+    d.mkpath(path);
+
+    QFile file(path + "/" + fileName);
+    if (file.open(QIODevice::WriteOnly))
+    {
+        QXmlStreamWriter *writer = new QXmlStreamWriter(&file);
+        tagList->toXML(writer);
+        file.close();
+        qDebug() << path + "/" + fileName;
+    } else {
+        qDebug() << "Unable to save the data.";
+    }
+}

@@ -24,9 +24,12 @@ private:
 
     bool sideBarIsShown = true;
 
+    QString path = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+    QString fileName = "save.xml";
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
 
 private slots:
     void toggleSideBar();
