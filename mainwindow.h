@@ -14,6 +14,8 @@
 #include <QMimeData>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QToolBar>
+
 
 #include "tag.h"
 #include "taglistmodel.h"
@@ -27,9 +29,16 @@ private:
     TagListModel *tagListModel;
     QListView *listView;
 
+    QListView *listView2;
+
+    bool sideBarIsShown = true;
+
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+
+private slots:
+    void toggleSideBar();
 
 };
 
