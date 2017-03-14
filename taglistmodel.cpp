@@ -58,9 +58,8 @@ bool TagListModel::insertRows(int row, int count,
     static int defaultColorsIndex = 0;
     static int defaultColorsLength = 7;
 
-
     /* Ce qui se passe si on ajoute count ligne a l'indice row */
-    if (row != rowCount(QModelIndex())) {
+    if (row != rowCount()) {
         /* Si on veut ajouter une ligne pas a la fin on abort */
         return false;
     }
@@ -71,86 +70,62 @@ bool TagListModel::insertRows(int row, int count,
     //c'est dans la doc de faire ça
     emit beginInsertRows(parent, row, row+count);
     //et voilà ce qu'on fait vraiment
-    Tag *n_tag = new Tag("New Tag");
-    n_tag->setBulletColor(defaultColors[defaultColorsIndex]);
-    defaultColorsIndex = (defaultColorsIndex + 1) % defaultColorsLength;
-
-    m_tags->append(n_tag);
-
+    for (int i = 0; i < count; i++) {
+        Tag *n_tag = new Tag("New Tag");
+        n_tag->setBulletColor(defaultColors[defaultColorsIndex]);
+        defaultColorsIndex = (defaultColorsIndex + 1) % defaultColorsLength;
+        m_tags->append(n_tag);
+    }
     //c'est dans la doc de faire ça
     emit endInsertRows();
     return true;
 }
 
-
-Qt::ItemFlags TagListModel::flags(const QModelIndex &index) const {
-/* renvoie des infos sur les actions possibles sur l'élement */
-    return Qt::ItemIsEditable | Qt::ItemIsDragEnabled
-            | Qt::ItemIsDropEnabled |QAbstractListModel::flags(index);
+bool TagListModel::removeRows(int row, int count,
+                const QModelIndex &parent) {
+    if (row < 0 || row > rowCount()) {
+        /* Si on veut ajouter une ligne pas a la fin on abort */
+        return false;
+    }
+    if (parent.row() != -1) {
+        /* si on veut ajouter un row dans un row et pas entre 2 */
+        return false;
+    }
+    //c'est dans la doc de faire ça
+    emit beginRemoveRows(parent, row, row+count);
+    //et voilà ce qu'on fait vraiment
+    for (int i = 0; i < count; i++) {
+        m_tags->removeAt(i+row);
+    }
+    //c'est dans la doc de faire ça
+    emit endRemoveRows();
+    return true;
 }
 
-Qt::DropActions TagListModel::supportedDropActions() const {
-    /* ça je sais pas trop mais c'est requis pour drop des fichiers */
-    return Qt::CopyAction;
-    //Là vraiment aucune idée vraiment genre la doc n'est d'aucune utilité
-}
+bool TagListModel::moveRows(const QModelIndex &sourceParent, int sourceRow,
+                            int count, const QModelIndex &destinationParent,
+                            int destinationChild) {
 
-QStringList TagListModel::mimeTypes() const {
-    /* Dit quels type d'info le drop accepte si c'est
-     * pas dedans on accepte pas et il ne se passe rien
-     * ça dit a Qt ce qu'on accepte exclusivement */
-    QStringList qstrList;
-    /* ce qui nous interesse c'est le nom des fichiers */
-    qstrList.append("text/uri-list");
-    return qstrList;
-}
+    if (sourceRow < 0 || sourceRow > rowCount()
+            || destinationChild < 0 || destinationChild > rowCount()) {
+        return false;
+    }
+    if (sourceParent.row() != -1 || destinationParent.row() != 1) {
+        return false;
+    }
 
-bool TagListModel::canDropMimeData(const QMimeData *data, Qt::DropAction action,
-                  int row, int column, const QModelIndex &parent) const {
-    Q_UNUSED(action)
-
-    if (data->formats().contains("application/x-qt-mime-type-name")) {
-        /* This a tag we want to move */
-        return parent.row() == -1 && parent.column() == -1;
-    } else {
-        /* This is a uri-list */
-        return row == -1 && column == -1;
+    for (int i = 0; i < count; i++) {
+        m_tags->move(sourceRow + i, destinationChild + i);
     }
 
     return false;
 }
 
-bool TagListModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
-                  int row, int column, const QModelIndex &parent) {
-    /*que faire si des données sont droppés*/
-    Q_UNUSED(action)
 
-    if (row == -1 && column == -1) {
-        /* Si le drop se fait sur un element */
-        QStringList files;
-        QList<TagFile *> list;
 
-        //On récupere les données
-        files = data->text().split("\n", QString::SkipEmptyParts);
-
-        //Pour chaque fichier droppé on crée un TagFile
-        for (QString filePath : files) {
-            list.append(new TagFile(filePath));
-        }
-
-        qDebug() << "On Item" << files;
-        /* On ajoute les TagFile au Tag */
-        m_tags->at(parent.row())->append(list);
-
-        //On affiche le nombre de fichier du tag
-        qDebug() << m_tags->at(parent.row())->length();
-
-    } else if (parent.row() == -1 && parent.column() == -1) {
-        /* Si le drop se fait entre 2 lignes */
-        qDebug() << "Between lines" << data->text();
-        return false;
-    }
-    return true;
+Qt::ItemFlags TagListModel::flags(const QModelIndex &index) const {
+/* renvoie des infos sur les actions possibles sur l'élement */
+    return Qt::ItemIsEditable | QAbstractListModel::flags(index);
 }
 
 void TagListModel::requestedAddTag() {
