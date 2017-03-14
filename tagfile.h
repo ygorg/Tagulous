@@ -1,16 +1,11 @@
 #ifndef TAGFILE_H
 #define TAGFILE_H
 
-#include <QColor>
+#include <QObject>
 #include <QString>
-#include <QList>
 #include <QIcon>
-#include <QAbstractListModel>
-#include <QDebug>
-#include <QMimeData>
-
-#include <QPixmap>
-#include <QPainter>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 class TagFile : public QObject {
     /* Représente un fichier dans un Tag
@@ -24,6 +19,7 @@ class TagFile : public QObject {
     public:
         explicit TagFile(QString filePath);
         QString getPath();
+        QMimeType getMimeType();
         QString getName();
         QIcon getIcon();
 

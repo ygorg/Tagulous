@@ -21,6 +21,10 @@ void Tag::setBulletColor(QColor color) {
                               m_bullet.height()/2), 45, 45);
 }
 
+QColor Tag::getColor() {
+    return m_color;
+}
+
 QPixmap Tag::getBullet() {
     return m_bullet.scaled(30, 30);
 }

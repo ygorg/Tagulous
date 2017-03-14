@@ -2,22 +2,13 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QLabel>
-#include <QPainter>
 #include <QListView>
-#include <QStringListModel>
-#include <QStringList>
-#include <QListWidget>
-#include <QMessageBox>
-#include <QDropEvent>
-#include <QDragEnterEvent>
-#include <QMimeData>
-#include <QPushButton>
-#include <QVBoxLayout>
-#include <QToolBar>
+#include <QString>
+#include <QStandardPaths>
+#include <QDir>
+#include <QDebug>
 
-
-#include "tag.h"
+#include "taglist.h"
 #include "taglistmodel.h"
 #include "filelistmodel.h"
 
@@ -26,17 +17,20 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 private:
-    QList<Tag *> *tagList;
+    TagList *tagList;
     TagListModel *tagListModel;
-    QListView *listView;
 
+    QListView *listView;
     QListView *listView2;
 
     bool sideBarIsShown = true;
 
+    QString path = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
+    QString fileName = "save.xml";
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
 
 private slots:
     void toggleSideBar();

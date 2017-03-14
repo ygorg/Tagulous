@@ -1,17 +1,15 @@
 #ifndef TAGLISTMODEL_H
 #define TAGLISTMODEL_H
 
-#include <QColor>
-#include <QString>
-#include <QList>
 #include <QAbstractListModel>
-#include <QDebug>
+#include <QList>
+#include <QAction>
+#include <QToolBar>
+#include <QHBoxLayout>
 #include <QMimeData>
+#include <QDebug>
 
-#include <QPixmap>
-#include <QPainter>
-
-#include "tag.h"
+#include "taglist.h"
 
 class TagListModel : public QAbstractListModel {
 /* Un modele qui fait l'interface entre une liste de Tag
@@ -20,9 +18,9 @@ class TagListModel : public QAbstractListModel {
 * représenter une liste de tag */
     Q_OBJECT
 private:
-    QList<Tag *> *m_tags;
+    TagList *m_tags;
 public:
-    TagListModel(QList<Tag *> *tagList, QObject *parent);
+    TagListModel(TagList *tagList, QObject *parent);
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     bool setData(const QModelIndex &index,
@@ -35,9 +33,6 @@ public:
                       int row, int column, const QModelIndex &parent) const override;
     bool dropMimeData(const QMimeData *data, Qt::DropAction action,
                       int row, int column, const QModelIndex &parent) override;
-
-    /* For test purpose */
-    void init(); /* Initialises the model with false values */
 
 public slots:
     void requestedAddTag();

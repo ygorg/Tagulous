@@ -28,10 +28,12 @@ SOURCES += main.cpp\
         tag.cpp \
         taglistmodel.cpp \
         tagfile.cpp \
+    taglist.cpp \
     filelistmodel.cpp
 
 HEADERS  += mainwindow.h\
             tag.h \
             taglistmodel.h \
             tagfile.h \
+    taglist.h \
     filelistmodel.h
