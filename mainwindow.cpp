@@ -48,6 +48,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(toggleSideBarAction, SIGNAL(triggered(bool)),
             this, SLOT(toggleSideBar()));
 
+    QAction *deleteAction = new QAction(tr("Delete"), this);
+    connect(deleteAction, SIGNAL(triggered(bool)),
+            this, SLOT(deleteElement()));
 
     QToolBar *toolbar_ = new QToolBar(this);
     setUnifiedTitleAndToolBarOnMac(true);
@@ -56,6 +59,7 @@ MainWindow::MainWindow(QWidget *parent) :
     toolbar_->setFloatable(false);
     toolbar_->addAction(addAction);
     toolbar_->addAction(toggleSideBarAction);
+    toolbar_->addAction(deleteAction);
 
     qDebug() << QIcon::hasThemeIcon("list-add") << QIcon::themeName() << QIcon::themeSearchPaths();
 
@@ -77,6 +81,13 @@ void MainWindow::toggleSideBar() {
         listView2->show();
     } else {
         listView2->hide();
+    }
+}
+
+void MainWindow::deleteElement() {
+
+    for (QModelIndex index : listView->selectionModel()->selectedRows()) {
+        tagListModel->removeRow(index.row(), index.parent());
     }
 }
 

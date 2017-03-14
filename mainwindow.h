@@ -34,6 +34,7 @@ public:
 
 private slots:
     void toggleSideBar();
+    void deleteElement();
 
 };
 
