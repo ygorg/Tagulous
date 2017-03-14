@@ -7,6 +7,8 @@
 #include <QStandardPaths>
 #include <QDir>
 #include <QDebug>
+#include <QMenu>
+#include <QMenuBar>
 
 #include "taglist.h"
 #include "taglistmodel.h"
@@ -33,9 +35,14 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void createActions();
+
 private slots:
     void toggleSideBar();
     void deleteElement();
+    void renameElement();
+    void copyElement();
+    void pasteElement();
 
 };
 
