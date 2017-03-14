@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
         qDebug() << "Unable to load the data.";
     }
 
-    tagListModel = new TagListModel(tagList, 0);
+    tagListModel = new TagListModelDrop(tagList, 0);
 
     listView = new QListView();
     listView->setModel(tagListModel);
