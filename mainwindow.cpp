@@ -48,9 +48,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(toggleSideBarAction, SIGNAL(triggered(bool)),
             this, SLOT(toggleSideBar()));
 
+    QAction *copyAction = new QAction(tr("Copy"), this);
+
+    QAction *pasteAction = new QAction(tr("Paste"), this);
+    QAction *renameAction = new QAction(tr("Rename"), this);
+
     QAction *deleteAction = new QAction(tr("Delete"), this);
     connect(deleteAction, SIGNAL(triggered(bool)),
             this, SLOT(deleteElement()));
+
 
     QToolBar *toolbar_ = new QToolBar(this);
     setUnifiedTitleAndToolBarOnMac(true);
