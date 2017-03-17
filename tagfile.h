@@ -7,12 +7,17 @@
 #include <QMimeDatabase>
 #include <QMimeType>
 
+
+class Tag;
+
 class TagFile : public QObject {
     /* Représente un fichier dans un Tag
      * On sait jamais si il faudra des membres
      * ou des méthodes en plus mieux vaux faire une classe direct */
       Q_OBJECT
     private:
+
+        QList<Tag *> *parentTags = new QList<Tag *>;
         QString m_filePath;
         QString name;
         QIcon icon;
@@ -22,6 +27,11 @@ class TagFile : public QObject {
         QMimeType getMimeType();
         QString getName();
         QIcon getIcon();
+
+        QList<Tag *> *getTags();
+        void addParentTag(Tag *tag) const;
+        void removeParentTag(Tag *tag);
+        ~TagFile();
 
 };
 

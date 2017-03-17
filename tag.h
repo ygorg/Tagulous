@@ -24,6 +24,9 @@ public:
     QColor getColor();
     QString getName();
     void setName(QString value);
+
+    void insert(int i, TagFile *value);
+    void removeAt(int i);
 };
 
 #endif // TAG_H

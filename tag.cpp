@@ -37,6 +37,18 @@ void Tag::setName(QString value) {
     m_tagName = value;
 }
 
+/*****
+ * Handshake with TagFile
+ *****/
+
+void Tag::insert(int i, TagFile *value) {
+    value->addParentTag(this);
+    QList::insert(i, value);
+}
+void Tag::removeAt(int i) {
+    at(i)->removeParentTag(this);
+    QList::removeAt(i);
+}
 
 //TODO faire une classe qui hérite de QList<Tag *>
 // et qui représente les Tags
