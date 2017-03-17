@@ -30,6 +30,8 @@ MainWindow::MainWindow(QWidget *parent) :
     listView->setDropIndicatorShown(true);
     listView->setAttribute(Qt::WA_MacShowFocusRect, false);
     listView->setEditTriggers(QAbstractItemView::SelectedClicked);
+    connect(listView, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(doubleClicked()));
 
     listView2 = new QListView();
     listView2->setModel(fileListModel);
@@ -89,6 +91,11 @@ void MainWindow::createActions() {
     connect(deleteAction, SIGNAL(triggered(bool)),
             this, SLOT(deleteElement()));
 
+    QAction *selectTagsAction = new QAction(tr("Filter"), this);
+    connect(selectTagsAction, SIGNAL(triggered(bool)),
+            this, SLOT(selectTags()));
+
+
     QMenu *menu = new QMenu(tr("File"));
     menu->addAction(addAction);
     menu->addAction(toggleSideBarAction);
@@ -139,6 +146,28 @@ void MainWindow::renameElement() {
 
 void MainWindow::copyElement() {}
 void MainWindow::pasteElement() {}
+
+void MainWindow::selectTags() {
+    //TODO here add checkboxes in front of the tags
+}
+
+void MainWindow::doubleCLicked(QModelIndex index) {
+
+    /*QList<Tag *> fileList = new QList<Tag *>();
+    fileList.append(tagList->at(index.row()));
+
+    fileListModel = new FileListModel(fileList);
+    listView2->setModel(fileListModel);
+
+    listView->hide();
+    listView2->show();
+    QToolBar *toolbar = new QToolBar();
+    QAction *previousAction = new QAction(tr("Back"), this);
+    connect(previousAction, SIGNAL(triggered(bool)),
+            this, SLOT(goBack()));
+
+    toolbar->addAction(previousAction);*/
+}
 
 MainWindow::~MainWindow() {
 

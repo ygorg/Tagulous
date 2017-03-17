@@ -44,6 +44,8 @@ private slots:
     void renameElement();
     void copyElement();
     void pasteElement();
+    void selectTags();
+    void doubleCLicked(QModelIndex index);
 
 };
 
