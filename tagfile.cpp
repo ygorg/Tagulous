@@ -18,7 +18,7 @@ QMimeType TagFile::getMimeType() {
 }
 
 QString TagFile::getName() {
-    return name;
+    return "name";
 }
 
 QIcon TagFile::getIcon() {

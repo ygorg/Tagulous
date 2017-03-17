@@ -22,6 +22,7 @@ class MainWindow : public QMainWindow
 private:
     TagList *tagList;
     TagListModel *tagListModel;
+    FileListModel *fileListModel;
 
     QListView *listView;
     QListView *listView2;

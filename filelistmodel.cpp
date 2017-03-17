@@ -1,21 +1,22 @@
 #include "filelistmodel.h"
 
+#include<QDebug>
+
 FileListModel::FileListModel(QList<Tag*> *list, QObject *parent = 0)
     : QAbstractListModel(parent) {
     tagList = list;
-
     fileList = new QList<TagFile*>;
     for (Tag *tag : *tagList) {
         fileList->append(*tag);
     }
+    for (TagFile *file : *fileList) {
+        qDebug() << file->getPath();
+    }
 }
 
 int FileListModel::rowCount(const QModelIndex &parent) const {
-    int size = 0;
-    for(Tag *tag : *tagList) {
-        size += tag->length();
-    }
-    return size;
+    Q_UNUSED(parent)
+    return fileList->length();
 }
 
 QVariant FileListModel::data(const QModelIndex &index, int role) const {
@@ -34,4 +35,6 @@ bool FileListModel::setData(const QModelIndex &index, const QVariant &value,
     // on n'est rien censé pouvoir modifier
     return false;
 }
+
+
 

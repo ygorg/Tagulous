@@ -19,7 +19,8 @@ MainWindow::MainWindow(QWidget *parent) :
         qDebug() << "Unable to load the data.";
     }
 
-    tagListModel = new TagListModelDrop(tagList, 0);
+    tagListModel = new TagListModel(tagList, 0);
+    fileListModel = new FileListModel(tagList, 0);
 
     listView = new QListView();
     listView->setModel(tagListModel);
@@ -31,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
     listView->setEditTriggers(QAbstractItemView::SelectedClicked);
 
     listView2 = new QListView();
-    listView2->setModel(tagListModel);
+    listView2->setModel(fileListModel);
     listView2->setSelectionMode(QAbstractItemView::ExtendedSelection);
     listView2->setDragEnabled(true);
     listView2->setAcceptDrops(true);
