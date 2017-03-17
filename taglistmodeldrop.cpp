@@ -30,7 +30,7 @@ QStringList TagListModelDrop::mimeTypes() const {
 bool TagListModelDrop::canDropMimeData(const QMimeData *data, Qt::DropAction action,
                   int row, int column, const QModelIndex &parent) const {
 
-
+    Q_UNUSED(row)
     if (action == Qt::IgnoreAction)
         return true;
 

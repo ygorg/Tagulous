@@ -156,7 +156,7 @@ void MainWindow::selectTags() {
 }
 
 void MainWindow::doubleCLicked(QModelIndex index) {
-
+    Q_UNUSED(index)
     /*QList<Tag *> fileList = new QList<Tag *>();
     fileList.append(tagList->at(index.row()));
 

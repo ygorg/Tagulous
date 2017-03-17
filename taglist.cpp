@@ -2,9 +2,7 @@
 
 TagList::TagList()
     : QList<Tag *>()
-{
-
-}
+{}
 
 void TagList::fromXML(QXmlStreamReader *reader) {
 

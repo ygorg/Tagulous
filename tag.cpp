@@ -37,31 +37,7 @@ void Tag::setName(QString value) {
     m_tagName = value;
 }
 
-//Faire un diagramme UML pour pas se perdre
-//Faire le paper prototype
 
 //TODO faire une classe qui hérite de QList<Tag *>
 // et qui représente les Tags
 // pour avoir un slot requestedAddFiles(int row, QList<TagFile *>)
-
-//Faire un model pour les QList<TagFile *>
-// pour ensuite les afficher dans une listView
-// pour la partir où afficher les fichiers
-
-//Faire des fonctions pour la persistance
-// y a une giga fonction qui request un endroit pour stocker les fichiers
-// ce serais cool de l'utiliser
-// genre classe::toXML ou n'importe quel format
-// et du coup classe::fromXML ou n'importe quel format
-
-//Comment changer l'affichage des QListView qui est dégueu
-// pouvoir mettre des icones devant les tags genre comme sur mac des couleurs
-// déjà les feuilles de styles c'est pas mal !
-//Pouvoir réorganiser les tags
-//  de manière jolie genre tu clique et ça "prend" l'item genre il grossis
-//  et suis ta souris
-
-////////
-/// Slots
-////////
-
