@@ -65,7 +65,7 @@ bool TagListModelDrop::dropMimeData(const QMimeData *data, Qt::DropAction action
         return false;
 
 
-    Tag *tag = m_tags->at(row);
+    Tag *tag = _tags->at(row);
 
     QList<QUrl> files = data->urls();
     QList<TagFile *> list;

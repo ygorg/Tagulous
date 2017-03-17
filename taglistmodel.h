@@ -18,7 +18,7 @@ class TagListModel : public QAbstractListModel {
 * représenter une liste de tag */
     Q_OBJECT
 protected:
-    TagList *m_tags;
+    TagList *_tags;
 public:
     TagListModel(TagList *tagList, QObject *parent);
 

@@ -2,19 +2,19 @@
 
 TagFile::TagFile(QString filePath)
     : QObject() {
-    m_filePath = filePath;
-    name = filePath.section(',', -1, -1);
-    icon = QIcon(":icons/fileicon.png");
+    _filePath = filePath;
+    _name = filePath.section(',', -1, -1);
+    _icon = QIcon(":icons/fileicon.png");
     TagFile::newTagFile(this);
 }
 
 QString TagFile::getPath() {
-    return m_filePath;
+    return _filePath;
 }
 
 QMimeType TagFile::getMimeType() {
     QMimeDatabase db;
-    QMimeType type = db.mimeTypeForFile(m_filePath);
+    QMimeType type = db.mimeTypeForFile(_filePath);
     return type;
 }
 
@@ -23,11 +23,11 @@ QString TagFile::getName() {
 }
 
 QIcon TagFile::getIcon() {
-    return icon;
+    return _icon;
 }
 
 QList<Tag *> *TagFile::getTags() {
-    return parentTags;
+    return _parentTags;
 }
 
 
@@ -37,16 +37,16 @@ QList<Tag *> *TagFile::getTags() {
  ******/
 
 void TagFile::addParentTag(Tag *tag) const {
-    parentTags->append(tag);
+    _parentTags->append(tag);
 }
 
 void TagFile::removeParentTag(Tag *tag) {
-    parentTags->removeOne(tag);
+    _parentTags->removeOne(tag);
 }
 
 TagFile::~TagFile() {
     TagFile::deleteTagFile(this);
-    delete parentTags;
+    delete _parentTags;
 }
 
 

@@ -19,10 +19,10 @@ class TagFile : public QObject {
     private:
         static QSet<TagFile *> *instances;
 
-        QList<Tag *> *parentTags = new QList<Tag *>;
-        QString m_filePath;
-        QString name;
-        QIcon icon;
+        QList<Tag *> *_parentTags = new QList<Tag *>;
+        QString _filePath;
+        QString _name;
+        QIcon _icon;
 
         explicit TagFile(QString filePath);
 

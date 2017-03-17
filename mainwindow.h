@@ -24,8 +24,8 @@ private:
     TagListModel *tagListModel;
     FileListModel *fileListModel;
 
-    QListView *listView;
-    QListView *listView2;
+    QListView *tagListView;
+    QListView *fileListView;
 
     bool sideBarIsShown = true;
 

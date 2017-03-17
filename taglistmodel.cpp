@@ -2,13 +2,13 @@
 
 TagListModel::TagListModel(TagList *tagList, QObject *parent=0)
     : QAbstractListModel(parent) {
-    m_tags = tagList;
+    _tags = tagList;
 }
 
 int TagListModel::rowCount(const QModelIndex &parent) const {
     /* La base du model : combien d'éléments a afficher*/
     Q_UNUSED(parent)
-    return m_tags->length();
+    return _tags->length();
 }
 
 QVariant TagListModel::data(const QModelIndex &index,
@@ -20,9 +20,9 @@ QVariant TagListModel::data(const QModelIndex &index,
      * la police il faut renvoyer une police si le role c'est genre
      * Qt::DisplayFont (en vrai pas du tout mais c'est l'idée)*/
     if (role == Qt::DisplayRole) {
-        return m_tags->at(index.row())->getName();
+        return _tags->at(index.row())->getName();
     } else if (role == Qt::DecorationRole) {
-        return m_tags->at(index.row())->getBullet();
+        return _tags->at(index.row())->getBullet();
     } else if (role == Qt::SizeHintRole) {
         return QSize(10, 30);
     }
@@ -35,7 +35,7 @@ bool TagListModel::setData(const QModelIndex &index,
     if (role == Qt::EditRole && value != "") {
         /* en gros si on modifie le nom d'un tag et qu'on le met a ""
          * ben on fait rien */
-        m_tags->at(index.row())->setName(value.toString());
+        _tags->at(index.row())->setName(value.toString());
         emit dataChanged(index, index);
         return true;
     }
@@ -74,7 +74,7 @@ bool TagListModel::insertRows(int row, int count,
         Tag *n_tag = new Tag("New Tag");
         n_tag->setBulletColor(defaultColors[defaultColorsIndex]);
         defaultColorsIndex = (defaultColorsIndex + 1) % defaultColorsLength;
-        m_tags->append(n_tag);
+        _tags->append(n_tag);
     }
     //c'est dans la doc de faire ça
     emit endInsertRows();
@@ -95,7 +95,7 @@ bool TagListModel::removeRows(int row, int count,
     emit beginRemoveRows(parent, row, row+count);
     //et voilà ce qu'on fait vraiment
     for (int i = 0; i < count; i++) {
-        m_tags->removeAt(i+row);
+        _tags->removeAt(i+row);
     }
     //c'est dans la doc de faire ça
     emit endRemoveRows();
@@ -115,7 +115,7 @@ bool TagListModel::moveRows(const QModelIndex &sourceParent, int sourceRow,
     }
 
     for (int i = 0; i < count; i++) {
-        m_tags->move(sourceRow + i, destinationChild + i);
+        _tags->move(sourceRow + i, destinationChild + i);
     }
 
     return false;

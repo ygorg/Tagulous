@@ -14,9 +14,9 @@ class Tag : public QList<TagFile *> {
 /* Un tag c'est avant tout une liste de fichier
  * avec une couleur (pour le cercle mais c'est a voir)*/
 private:
-    QString m_tagName;
-    QColor m_color;
-    QPixmap m_bullet;
+    QString _tagName;
+    QColor _color;
+    QPixmap _bullet;
 public:
     explicit Tag(QString tagName);
     void setBulletColor(QColor color);

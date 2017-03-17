@@ -26,32 +26,32 @@ MainWindow::MainWindow(QWidget *parent) :
     fileListModel = new FileListModel(lst);
 
 
-    listView = new QListView();
-    listView->setModel(tagListModel);
-    listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    listView->setDragEnabled(true);
-    listView->setAcceptDrops(true);
-    listView->setDropIndicatorShown(true);
-    listView->setAttribute(Qt::WA_MacShowFocusRect, false);
-    listView->setEditTriggers(QAbstractItemView::SelectedClicked);
-    connect(listView, SIGNAL(doubleClicked(QModelIndex)),
+    tagListView = new QListView();
+    tagListView->setModel(tagListModel);
+    tagListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    tagListView->setDragEnabled(true);
+    tagListView->setAcceptDrops(true);
+    tagListView->setDropIndicatorShown(true);
+    tagListView->setAttribute(Qt::WA_MacShowFocusRect, false);
+    tagListView->setEditTriggers(QAbstractItemView::SelectedClicked);
+    connect(tagListView, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(doubleClicked()));
 
-    listView2 = new QListView();
-    listView2->setModel(fileListModel);
-    listView2->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    listView2->setDragEnabled(true);
-    listView2->setAcceptDrops(true);
-    listView2->setDropIndicatorShown(true);
-    listView2->setAttribute(Qt::WA_MacShowFocusRect, false);
+    fileListView = new QListView();
+    fileListView->setModel(fileListModel);
+    fileListView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    fileListView->setDragEnabled(true);
+    fileListView->setAcceptDrops(true);
+    fileListView->setDropIndicatorShown(true);
+    fileListView->setAttribute(Qt::WA_MacShowFocusRect, false);
 
     qDebug() << QIcon::hasThemeIcon("list-add") << QIcon::themeName() << QIcon::themeSearchPaths();
 
 
 
     QHBoxLayout *layout = new QHBoxLayout;
-    layout->addWidget(listView2);
-    layout->addWidget(listView);
+    layout->addWidget(fileListView);
+    layout->addWidget(tagListView);
 
     createActions();
 
@@ -128,15 +128,15 @@ void MainWindow::createActions() {
 void MainWindow::toggleSideBar() {
     sideBarIsShown = !sideBarIsShown;
     if (sideBarIsShown) {
-        listView2->show();
+        fileListView->show();
     } else {
-        listView2->hide();
+        fileListView->hide();
     }
 }
 
 void MainWindow::deleteElement() {
     QModelIndexList::reverse_iterator it;
-    QModelIndexList indexes = listView->selectionModel()->selectedRows();
+    QModelIndexList indexes = tagListView->selectionModel()->selectedRows();
     for(it = indexes.rbegin(); it != indexes.rend(); ++it) {
         //delete tagList->at(index.row());
         tagListModel->removeRow(it->row(), it->parent());
@@ -144,10 +144,10 @@ void MainWindow::deleteElement() {
 }
 
 void MainWindow::renameElement() {
-    if (listView->selectionModel()->selectedRows().length() <= 0) {
+    if (tagListView->selectionModel()->selectedRows().length() <= 0) {
         return;
     }
-    listView->edit(listView->selectionModel()->selectedRows().at(0));
+    tagListView->edit(tagListView->selectionModel()->selectedRows().at(0));
 }
 
 void MainWindow::copyElement() {}
