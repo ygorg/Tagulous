@@ -3,8 +3,8 @@
 TagFile::TagFile(QString filePath)
     : QObject() {
     m_filePath = filePath;
-    name = "";
-    icon = QIcon();
+    name = filePath.section(',', -1, -1);
+    icon = QIcon("fileicon.png");
     TagFile::newTagFile(this);
 }
 
