@@ -135,10 +135,11 @@ void MainWindow::toggleSideBar() {
 }
 
 void MainWindow::deleteElement() {
-
-    for (QModelIndex index : listView->selectionModel()->selectedRows()) {
-        delete tagList->at(index.row());
-        tagListModel->removeRow(index.row(), index.parent());
+    QModelIndexList::reverse_iterator it;
+    QModelIndexList indexes = listView->selectionModel()->selectedRows();
+    for(it = indexes.rbegin(); it != indexes.rend(); ++it) {
+        //delete tagList->at(index.row());
+        tagListModel->removeRow(it->row(), it->parent());
     }
 }
 
