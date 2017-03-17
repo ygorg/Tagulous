@@ -46,7 +46,7 @@ void TagList::fromXML(QXmlStreamReader *reader) {
             break;
         case QXmlStreamReader::Characters:
             if (inFile) {
-                currentFile = new TagFile(reader->text().toString());
+                currentFile = TagFile::find(reader->text().toString());
             }
             break;
         default:

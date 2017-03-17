@@ -5,6 +5,7 @@ TagFile::TagFile(QString filePath)
     m_filePath = filePath;
     name = "";
     icon = QIcon();
+    TagFile::newTagFile(this);
 }
 
 QString TagFile::getPath() {
@@ -44,5 +45,34 @@ void TagFile::removeParentTag(Tag *tag) {
 }
 
 TagFile::~TagFile() {
+    TagFile::deleteTagFile(this);
     delete parentTags;
 }
+
+
+/******
+ * Static functions
+ *
+ * We keep track of created TagFile so each instance is unique
+ *
+ ******/
+
+QSet<TagFile *> *TagFile::instances = new QSet<TagFile *>;
+
+void TagFile::newTagFile(TagFile *file) {
+    instances->insert(file);
+}
+
+void TagFile::deleteTagFile(TagFile *file) {
+    instances->remove(file);
+}
+
+TagFile *TagFile::find(QString path) {
+    for (TagFile *file : *instances) {
+        if (file->getPath() == path) {
+            return file;
+        }
+    }
+    return new TagFile(path);
+}
+

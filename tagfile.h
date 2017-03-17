@@ -6,6 +6,7 @@
 #include <QIcon>
 #include <QMimeDatabase>
 #include <QMimeType>
+#include <QSet>
 
 
 class Tag;
@@ -16,13 +17,20 @@ class TagFile : public QObject {
      * ou des méthodes en plus mieux vaux faire une classe direct */
       Q_OBJECT
     private:
+        static QSet<TagFile *> *instances;
 
         QList<Tag *> *parentTags = new QList<Tag *>;
         QString m_filePath;
         QString name;
         QIcon icon;
-    public:
+
         explicit TagFile(QString filePath);
+
+    public:
+        static void newTagFile(TagFile *file);
+        static void deleteTagFile(TagFile *file);
+        static TagFile *find(QString path);
+
         QString getPath();
         QMimeType getMimeType();
         QString getName();

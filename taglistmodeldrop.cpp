@@ -72,7 +72,7 @@ bool TagListModelDrop::dropMimeData(const QMimeData *data, Qt::DropAction action
 
     //Pour chaque url droppé on crée un TagFile qu'on ajoute au tag
     for (QUrl url : files) {
-        tag->append(new TagFile(url.fileName()));
+        tag->append(TagFile::find(url.url()));
     }
 
     return true;
