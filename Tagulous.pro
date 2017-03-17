@@ -39,3 +39,6 @@ HEADERS  += mainwindow.h\
     taglist.h \
     filelistmodel.h \
     taglistmodeldrop.h
+
+RESOURCES += \
+    resources.qrc
