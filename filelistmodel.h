@@ -12,10 +12,10 @@
 class FileListModel : public QAbstractListModel {
     Q_OBJECT
 private:
-    QList<Tag*> *tagList;
-    QList<TagFile*> *fileList;
+    QList<Tag*> *_tagList;
 public:
     FileListModel(QList<Tag*> *list, QObject *parent=0);
+    FileListModel(Tag *tag, QObject *parent=0);
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     bool setData(const QModelIndex &index, const QVariant &value,

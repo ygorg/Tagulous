@@ -4,28 +4,44 @@
 
 FileListModel::FileListModel(QList<Tag*> *list, QObject *parent)
     : QAbstractListModel(parent) {
-    tagList = list;
-    fileList = new QList<TagFile*>;
-    for (Tag *tag : *tagList) {
-        fileList->append(*tag);
-    }
-    for (TagFile *file : *fileList) {
-        qDebug() << file->getPath();
-    }
+    _tagList = list;
+}
+
+FileListModel::FileListModel(Tag *tag, QObject *parent)
+    : QAbstractListModel(parent) {
+    _tagList = new QList<Tag *>();
+    _tagList->append(tag);
+
 }
 
 int FileListModel::rowCount(const QModelIndex &parent) const {
     Q_UNUSED(parent)
-    return fileList->length();
+    int length = 0;
+    for (Tag *tag : *_tagList) {
+        length += tag->length();
+    }
+    return length;
 }
 
 QVariant FileListModel::data(const QModelIndex &index, int role) const {
     if (role == Qt::DisplayRole) {
-        return fileList->at(index.row())->getName();
+        int length = 0;
+        for (Tag *tag : *_tagList) {
+            if (index.row() - length < tag->length()) {
+                return tag->at(index.row() - length)->getName();
+            }
+            length += tag->length();
+        }
+
     } else if (role == Qt::DecorationRole) {
-        return fileList->at(index.row())->getIcon();
-    } else if (role == Qt::SizeHintRole) {
-        return QSize(10, 30);
+        int length = 0;
+        for (Tag *tag : *_tagList) {
+            if (index.row() - length < tag->length()) {
+                return tag->at(index.row() - length)->getIcon();
+            }
+            length += tag->length();
+        }
+
     }
     return QVariant();
 }
