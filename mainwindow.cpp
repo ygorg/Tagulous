@@ -137,6 +137,7 @@ void MainWindow::toggleSideBar() {
 void MainWindow::deleteElement() {
 
     for (QModelIndex index : listView->selectionModel()->selectedRows()) {
+        delete tagList->at(index.row());
         tagListModel->removeRow(index.row(), index.parent());
     }
 }
