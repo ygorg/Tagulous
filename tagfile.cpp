@@ -3,7 +3,7 @@
 TagFile::TagFile(QString filePath)
     : QObject() {
     _filePath = filePath;
-    _name = filePath.section(',', -1, -1);
+    _name = filePath.section('/', -1, -1);
     _icon = QIcon(":icons/fileicon.png");
     TagFile::newTagFile(this);
 }
@@ -19,7 +19,7 @@ QMimeType TagFile::getMimeType() {
 }
 
 QString TagFile::getName() {
-    return "name";
+    return _name;
 }
 
 QIcon TagFile::getIcon() {
