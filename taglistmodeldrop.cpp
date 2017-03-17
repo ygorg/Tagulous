@@ -1,6 +1,6 @@
 #include "taglistmodeldrop.h"
 
-TagListModelDrop::TagListModelDrop(TagList *tagList, QObject *parent=0)
+TagListModelDrop::TagListModelDrop(TagList *tagList, QObject *parent)
     : TagListModel(tagList, parent)
 {}
 

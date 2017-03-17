@@ -19,8 +19,12 @@ MainWindow::MainWindow(QWidget *parent) :
         qDebug() << "Unable to load the data.";
     }
 
-    tagListModel = new TagListModel(tagList, 0);
-    fileListModel = new FileListModel(tagList, 0);
+    tagListModel = new TagListModelDrop(tagList);
+    QList<Tag *> *lst = new QList<Tag *>();
+    lst->append(tagList->at(1));
+    //lst->append(tagList->at(3));
+    fileListModel = new FileListModel(lst);
+
 
     listView = new QListView();
     listView->setModel(tagListModel);

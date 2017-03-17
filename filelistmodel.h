@@ -15,7 +15,7 @@ private:
     QList<Tag*> *tagList;
     QList<TagFile*> *fileList;
 public:
-    FileListModel(QList<Tag*> *list, QObject *parent);
+    FileListModel(QList<Tag*> *list, QObject *parent=0);
     int rowCount(const QModelIndex &parent) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     bool setData(const QModelIndex &index, const QVariant &value,

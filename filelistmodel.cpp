@@ -2,7 +2,7 @@
 
 #include<QDebug>
 
-FileListModel::FileListModel(QList<Tag*> *list, QObject *parent = 0)
+FileListModel::FileListModel(QList<Tag*> *list, QObject *parent)
     : QAbstractListModel(parent) {
     tagList = list;
     fileList = new QList<TagFile*>;

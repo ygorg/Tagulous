@@ -6,7 +6,7 @@
 class TagListModelDrop : public TagListModel
 {
 public:
-    TagListModelDrop(TagList *tagList, QObject *parent);
+    TagListModelDrop(TagList *tagList, QObject *parent=0);
 
     Qt::ItemFlags flags(const QModelIndex &index) const override;
 
