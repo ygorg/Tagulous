@@ -11,7 +11,6 @@ FileListModel::FileListModel(Tag *tag, QObject *parent)
     : QAbstractListModel(parent) {
     _tagList = new QList<Tag *>();
     _tagList->append(tag);
-
 }
 
 int FileListModel::rowCount(const QModelIndex &parent) const {
@@ -41,7 +40,6 @@ QVariant FileListModel::data(const QModelIndex &index, int role) const {
             }
             length += tag->length();
         }
-
     }
     return QVariant();
 }
@@ -53,6 +51,32 @@ bool FileListModel::setData(const QModelIndex &index, const QVariant &value,
     Q_UNUSED(role)
     // on n'est rien censé pouvoir modifier
     return false;
+}
+
+bool FileListModel::removeRows(int row, int count,
+                const QModelIndex &parent) {
+    if (parent.isValid())
+        row = parent.row();
+
+    //c'est dans la doc de faire ça
+    emit beginRemoveRows(parent, row, row+count);
+    //et voilà ce qu'on fait vraiment
+
+    int length = 0;
+    for (Tag *tag : *_tagList) {
+        if (count == 0) {
+            return true;
+        }
+        while (row - length < tag->length() && count > 0) {
+            tag->removeAt(row - length);
+            count -=1;
+            row += 1;
+        }
+        length += tag->length();
+    }
+    //c'est dans la doc de faire ça
+    emit endRemoveRows();
+    return true;
 }
 
 

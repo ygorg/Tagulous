@@ -94,7 +94,7 @@ bool TagListModel::removeRows(int row, int count,
     //c'est dans la doc de faire ça
     emit beginRemoveRows(parent, row, row+count);
     //et voilà ce qu'on fait vraiment
-    for (int i = 0; i < count; i++) {
+    for (int i = count - 1; i >= 0; i--) {
         _tags->removeAt(i+row);
     }
     //c'est dans la doc de faire ça

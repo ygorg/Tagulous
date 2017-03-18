@@ -74,6 +74,7 @@ void TagListWidget::deleteElement() {
      * removing the first element moves all the other...
      */
     QModelIndexList indexes = _tagView->selectionModel()->selectedRows();
+    std::sort(indexes.begin(), indexes.end());
     QModelIndexList::reverse_iterator it;
 
     for(it = indexes.rbegin(); it != indexes.rend(); ++it) {

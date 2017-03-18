@@ -83,7 +83,9 @@ void FileListWidget::deleteElement() {
     /* Removing element from last to first as we operate on a list
      * removing the first element moves all the other...
      */
+
     QModelIndexList indexes = _fileView->selectionModel()->selectedRows();
+    std::sort(indexes.begin(), indexes.end());
     QModelIndexList::reverse_iterator it;
 
     for(it = indexes.rbegin(); it != indexes.rend(); ++it) {
