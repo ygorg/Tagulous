@@ -76,3 +76,7 @@ TagFile *TagFile::find(QString path) {
     return new TagFile(path);
 }
 
+QSet<TagFile *> *TagFile::getInstance() {
+    return instances;
+}
+

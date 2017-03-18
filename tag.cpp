@@ -19,6 +19,7 @@ void Tag::setBulletColor(QColor color) {
     paint->setBrush(_color.lighter(110));
     paint->drawEllipse(QPoint(_bullet.width()/2,
                               _bullet.height()/2), 45, 45);
+    delete paint;
 }
 
 QColor Tag::getColor() {

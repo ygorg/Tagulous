@@ -5,9 +5,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
 
     qDebug() << "TODO Add support for the search field\n"
-             << "TODO connect viewFileList and implement\n"
              << "TODO Add drag'n'drop support in FileListModel\n"
-             << "TODO Implement FileListWidget\n"
              << "TODO Adding files to a Tag shall SIGNAL some dataChanged\n";
 
     createActions();
@@ -28,39 +26,80 @@ MainWindow::MainWindow(QWidget *parent) :
 
     _tagListModel = new TagListModelDrop(_tagList);
 
-    _tagListWidget = new TagListWidget(_tagListModel, _actions);
+    _tagListWidget = new TagListWidget(_tagListModel, _actions);    
+    connect(_tagListWidget, SIGNAL(toolBarAction(QString)),
+            this, SLOT(addToolBarAction(QString)));
 
+    connect(_tagListWidget, SIGNAL(viewFileList(int)),
+            this, SLOT(showFileList(int)));
+
+    _fileListWidget = new FileListWidget(_actions);
+    connect(_fileListWidget, SIGNAL(toolBarAction(QString)),
+            this, SLOT(addToolBarAction(QString)));
+
+    connect(_fileListWidget, SIGNAL(viewTagList()),
+            this, SLOT(showTagList()));
+
+    _stackedWidget->addWidget(_tagListWidget);
+    _stackedWidget->addWidget(_fileListWidget);
+    setCentralWidget(_stackedWidget);
     showTagList();
 
 }
 
-void MainWindow::showTagList() {
-    setCentralWidget(_tagListWidget);
+void MainWindow::hideWidget() {
 
-    connect(_tagListWidget, SIGNAL(menuAction(QString)),
-            this, SLOT(addMenuAction(QString)));
-    connect(_tagListWidget, SIGNAL(toolBarAction(QString)),
-            this, SLOT(addToolBarAction(QString)));
 
-    _tagListWidget->connectActions();
+    QMapIterator<QString, QAction *> i(*_actions);
+    while (i.hasNext()) {
+        i.next();
+        disconnect(i.value(), SIGNAL(triggered()), 0, 0);
+        _toolbar->removeAction(i.value());
+        //_menu->removeAction(i.value());
+    }
+
+    _menu->removeAction(getAction("previous"));
+    _menu->removeAction(getAction("openInExplorer"));
+    _menu->removeAction(getAction("open"));
+    _menu->removeAction(getAction("rename"));
+    _menu->removeAction(getAction("filter"));
+
 }
 
-/*void MainWindow::showFileList() {
-    _fileListWidget = new _fileListWidget();
-    setCentralWidget(_fileListWidget);
+void MainWindow::showTagList() {
 
-    connect(_tagListWidget, SIGNAL(menuAction(QString)),
-            this, SLOT(addMenuAction(QString)));
-    connect(_tagListWidget, SIGNAL(toolBarAction(QString)),
-            this, SLOT(addToolBarAction(QString)));
-}*/
+    hideWidget();
+
+    _menu->addAction(getAction("rename"));
+    _menu->addAction(getAction("filter"));
+
+    _tagListWidget->connectActions();
+    _stackedWidget->setCurrentWidget(_tagListWidget);
+}
+
+void MainWindow::showFileList(int row) {
+
+    hideWidget();
+
+    _menu->addAction(getAction("previous"));
+    _menu->addAction(getAction("openInExplorer"));
+    _menu->addAction(getAction("open"));
+
+    FileListModel *m = new FileListModel(_tagList->at(row));
+    _fileListWidget->setModel(m);
+
+    _fileListWidget->connectActions();
+    _stackedWidget->setCurrentWidget(_fileListWidget);
+}
 
 QAction *MainWindow::getAction(QString key) {
     return _actions->value(key);
 }
 
 void MainWindow::createActions() {
-
+    /* Some icones might be here :
+     * /System/Library/CoreServices/SystemAppearance.bundle/Contents/Resources
+     */
     // General Actions
     QAction *addAction = new QAction(QIcon::fromTheme("list-add"), tr("Add"), this);
     addAction->setShortcut(QKeySequence::New);
@@ -108,12 +147,6 @@ void MainWindow::createActions() {
     openAction->setShortcut(QKeySequence::Open);
     _actions->insert("open", openAction);
 
-    /*QMapIterator<QString, QAction *> i(*_actions);
-    while (i.hasNext()) {
-        i.next();
-        _menu->addAction(i.value());
-        _toolbar->addAction(i.value());
-    }*/
 
     setUnifiedTitleAndToolBarOnMac(true);
     _toolbar->setMovable(false);
@@ -122,28 +155,19 @@ void MainWindow::createActions() {
     _menuBar->addMenu(_menu);
     this->addToolBar(_toolbar);
 
+    _menu->addAction(addAction);
+    _menu->addAction(copyAction);
+    _menu->addAction(pasteAction);
+    _menu->addAction(removeAction);
+    _menu->addAction(findAction);
 }
 
-/* Some icones might be here :
- * /System/Library/CoreServices/SystemAppearance.bundle/Contents/Resources
- */
 
-/*void MainWindow::createFileListActions() {
-    //connect add, remove, copy, paste
-    //go back, open in finder, open
-
-    connect(addAction, SIGNAL(triggered(bool)),
-            tagListModel, SLOT(requestedAddTag()));
-    connect(copyAction, SIGNAL(triggered(bool)),
-            this, SLOT(copyElement()));
-    connect(pasteAction, SIGNAL(triggered(bool)),
-            this, SLOT(pasteElement()));
-    connect(deleteAction, SIGNAL(triggered(bool)),
-            this, SLOT(deleteElement()));
-}*/
+void MainWindow::addToolBarAction(QString value) {
+    _toolbar->addAction(_actions->value(value));
+}
 
 MainWindow::~MainWindow() {
-
     QDir d;
     d.mkpath(_path);
 
@@ -153,15 +177,26 @@ MainWindow::~MainWindow() {
         QXmlStreamWriter *writer = new QXmlStreamWriter(&file);
         _tagList->toXML(writer);
         file.close();
+        delete writer;
     } else {
         qDebug() << "Unable to save the data.";
     }
-}
 
-void MainWindow::addToolBarAction(QString value) {
-    _toolbar->addAction(_actions->value(value));
-}
+    QMapIterator<QString, QAction *> i(*_actions);
+    while (i.hasNext()) {
+        i.next();
+        delete i.value();
+    }
+    delete _actions;
+    delete _toolbar;
+    delete _menu;
+    delete _menuBar;
 
-void MainWindow::addMenuAction(QString value) {
-    _menu->addAction(_actions->value(value));
+    delete _tagListWidget;
+    delete _fileListWidget;
+    delete _stackedWidget;
+
+    delete _tagListModel;
+    delete _tagList;
+
 }

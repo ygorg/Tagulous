@@ -27,18 +27,19 @@ private:
     QAbstractItemModel *_tagListModel;
 public:
     explicit TagListWidget(TagListModel *, QMap<QString, QAction *> *, QWidget *parent=0);
-
+    ~TagListWidget();
     void connectActions();
 
 signals:
     void toolBarAction(QString);
-    void menuAction(QString);
     void viewFileList(int);
 
 public slots:
     void deleteElement();
     void copyElement();
     void pasteElement();
+    void activateFind();
+
     void filterTags();
     void renameElement();
     void doubleClicked(QModelIndex);

@@ -30,6 +30,8 @@ class TagFile : public QObject {
         static void newTagFile(TagFile *file);
         static void deleteTagFile(TagFile *file);
         static TagFile *find(QString path);
+        static QSet<TagFile *> *getInstance();
+
 
         QString getPath();
         QMimeType getMimeType();

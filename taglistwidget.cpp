@@ -20,6 +20,8 @@ TagListWidget::TagListWidget(TagListModel *tagListModel,
     _tagView->setDropIndicatorShown(true);
     _tagView->setAttribute(Qt::WA_MacShowFocusRect, false);
     _tagView->setEditTriggers(QAbstractItemView::SelectedClicked);
+    connect(_tagView, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(doubleClicked(QModelIndex)));
 
     /* Defining the layout */
     _layout->addWidget(_searchBox);
@@ -37,35 +39,33 @@ void TagListWidget::connectActions() {
     connect(_actions->value("add"), SIGNAL(triggered(bool)),
             _tagListModel, SLOT(requestedAddTag()));
     emit toolBarAction("add");
-    emit menuAction("add");
 
 
     connect(_actions->value("copy"), SIGNAL(triggered(bool)),
             this, SLOT(copyElement()));
-    emit menuAction("copy");
 
 
     connect(_actions->value("paste"), SIGNAL(triggered(bool)),
             this, SLOT(pasteElement()));
-    emit menuAction("paste");
 
 
     connect(_actions->value("remove"), SIGNAL(triggered(bool)),
             this, SLOT(deleteElement()));
     emit toolBarAction("remove");
-    emit menuAction("remove");
+
+    connect(_actions->value("find"), SIGNAL(triggered(bool)),
+            this, SLOT(activateFind()));
+    emit toolBarAction("find");
 
 
     connect(_actions->value("rename"), SIGNAL(triggered(bool)),
             this, SLOT(renameElement()));
     emit toolBarAction("rename");
-    emit menuAction("rename");
 
 
     connect(_actions->value("filter"), SIGNAL(triggered(bool)),
             this, SLOT(filterTags()));
     emit toolBarAction("filter");
-    emit menuAction("filter");
 
 }
 
@@ -97,15 +97,26 @@ void TagListWidget::pasteElement() {
     qDebug() << "Paste on tags to be implemented";
 }
 
+void TagListWidget::activateFind() {
+    qDebug() << "Activate Find to be implemented";
+}
+
 void TagListWidget::filterTags() {
     //TODO here add checkboxes in front of the tags
     qDebug() << "Multi selection to be implemented";
 }
 
 void TagListWidget::doubleClicked(QModelIndex index) {
+    qDebug() << "DoubleClicked";
     if (!index.isValid()) {
         return;
     }
     /* We want to change view so we SIGNAL it */
     emit viewFileList(index.row());
+}
+
+TagListWidget::~TagListWidget() {
+    delete _layout;
+    delete _tagView;
+    delete _searchBox;
 }

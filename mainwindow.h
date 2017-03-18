@@ -11,6 +11,7 @@
 #include <QMenuBar>
 #include <QMap>
 #include <QMapIterator>
+#include <QStackedWidget>
 
 #include "taglist.h"
 #include "taglistmodel.h"
@@ -18,6 +19,7 @@
 #include "filelistmodel.h"
 
 #include "taglistwidget.h"
+#include "filelistwidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -25,8 +27,9 @@ class MainWindow : public QMainWindow
 
 private:
 
+    QStackedWidget *_stackedWidget = new QStackedWidget();
     TagListWidget *_tagListWidget;
-    //FileListWidget *_fileListWidget;
+    FileListWidget *_fileListWidget;
     QMap<QString, QAction *> *_actions = new QMap<QString, QAction *>;
 
     QToolBar *_toolbar = new QToolBar(this);
@@ -45,12 +48,13 @@ public:
 
     QAction *getAction(QString);
 
-    void showTagList();
     void createActions();
+    void hideWidget();
 
 private slots:
     void addToolBarAction(QString);
-    void addMenuAction(QString);
+    void showFileList(int row);
+    void showTagList();
 
 };
 

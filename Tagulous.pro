@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     taglist.cpp \
     filelistmodel.cpp \
     taglistmodeldrop.cpp \
-    taglistwidget.cpp
+    taglistwidget.cpp \
+    filelistwidget.cpp
 
 HEADERS  += mainwindow.h\
             tag.h \
@@ -40,7 +41,8 @@ HEADERS  += mainwindow.h\
     taglist.h \
     filelistmodel.h \
     taglistmodeldrop.h \
-    taglistwidget.h
+    taglistwidget.h \
+    filelistwidget.h
 
 RESOURCES += \
     resources.qrc
