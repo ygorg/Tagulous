@@ -9,6 +9,7 @@
 #include <QAction>
 #include <QMap>
 
+#include <qsortfilterproxymodelfixed.h>
 #include <QAbstractItemModel>
 
 #include "filelistmodel.h"
@@ -53,6 +54,7 @@ private:
     QListViewDrop *_fileView;
 
     FileListModel *_fileListModel;
+    QSortFilterProxyModel *_proxyModel;
 public:
     explicit FileListWidget(QMap<QString, QAction *> *, QWidget *parent=0);
 

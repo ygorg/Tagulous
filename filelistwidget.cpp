@@ -18,6 +18,13 @@ FileListWidget::FileListWidget(QMap<QString, QAction *> *actions,
     _fileView->setDropIndicatorShown(true);
     _fileView->setAttribute(Qt::WA_MacShowFocusRect, false);
     _fileView->setEditTriggers(QAbstractItemView::SelectedClicked);
+    _proxyModel = new QSortFilterProxyModelFixed();
+    _proxyModel->setFilterRole(Qt::DisplayRole);
+    _proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+
+    connect(_searchBox, SIGNAL(textChanged(QString)),
+            _proxyModel, SLOT(setFilterRegExp(QString)));
 
     /* Defining the layout */
     _layout->addWidget(_searchBox);
@@ -27,7 +34,10 @@ FileListWidget::FileListWidget(QMap<QString, QAction *> *actions,
 
 void FileListWidget::setModel(FileListModel *model) {
     _fileListModel = model;
-    _fileView->setModel(_fileListModel);
+    connect(_fileView, SIGNAL(requestAddFiles(QList<QUrl>)),
+            _fileListModel, SLOT(addFiles(QList<QUrl>)));
+    _proxyModel->setSourceModel(_fileListModel);
+    _fileView->setModel(_proxyModel);
 }
 
 FileListModel *FileListWidget::getModel() {
