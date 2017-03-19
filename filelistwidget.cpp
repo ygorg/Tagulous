@@ -86,8 +86,19 @@ void FileListWidget::connectActions() {
 
 }
 
-void FileListWidget::requestedAddFiles() {
-    qDebug() << "Add files to be implemented";
+void FileListWidget::addElement() {
+    /* QFileDialog does not allow to select files and directories
+     * A fix would be to reimplement QFileDialog ...
+     * Prefer drag'n'drop over addActions
+     */
+
+    QFileDialog *dialog = new QFileDialog();
+    QStringList fileNames;
+
+    if (dialog->exec())
+        fileNames = dialog->selectedFiles();
+
+    _fileListModel->addFiles(fileNames);
 }
 
 void FileListWidget::deleteElement() {
@@ -100,8 +111,7 @@ void FileListWidget::deleteElement() {
     QModelIndexList::reverse_iterator it;
 
     for(it = indexes.rbegin(); it != indexes.rend(); ++it) {
-        //delete tagList->at(index.row());
-        _fileListModel->removeRow(it->row(), it->parent());
+        _fileView->model()->removeRow(it->row(), it->parent());
     }
 }
 void FileListWidget::copyElement() {

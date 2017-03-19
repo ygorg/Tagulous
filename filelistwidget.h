@@ -66,7 +66,7 @@ signals:
     void viewTagList();
 
 public slots:
-    void requestedAddFiles();
+    void addElement();
     void deleteElement();
     void copyElement();
     void pasteElement();
