@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
                     "}");
     a.setAttribute(Qt::AA_UseHighDpiPixmaps);
     MainWindow w;
+    w.setMinimumWidth(335);
     w.show();
 
     return a.exec();

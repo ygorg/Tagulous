@@ -114,7 +114,7 @@ void MainWindow::createActions() {
     _actions->insert("paste", pasteAction);
 
 
-    QAction *removeAction = new QAction(tr("Delete"), this);
+    QAction *removeAction = new QAction(tr("Remove"), this);
 #ifdef Q_OS_MAC
     removeAction->setShortcut(QKeySequence(Qt::Key_Backspace));
 #else
@@ -139,7 +139,7 @@ void MainWindow::createActions() {
     previousAction->setShortcut(QKeySequence::Back);
     _actions->insert("previous", previousAction);
 
-    QAction *openInExplorerAction = new QAction(tr("Open in explorer"), this);
+    QAction *openInExplorerAction = new QAction(tr("Open in Finder"), this);
     _actions->insert("openInExplorer", openInExplorerAction);
 
     QAction *openAction = new QAction(tr("Open"), this);

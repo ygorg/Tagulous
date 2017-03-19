@@ -97,6 +97,7 @@ void FileListWidget::addElement() {
      */
 
     QFileDialog *dialog = new QFileDialog();
+    dialog->setDirectory(QDir::homePath());
     QStringList fileNames;
 
     if (dialog->exec())
