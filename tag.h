@@ -11,8 +11,7 @@
 #include "tagfile.h"
 
 class Tag : public QList<TagFile *> {
-/* Un tag c'est avant tout une liste de fichier
- * avec une couleur (pour le cercle mais c'est a voir)*/
+    // A Tag is a list of file
 private:
     QString _tagName;
     QColor _color;
@@ -25,6 +24,7 @@ public:
     QString getName();
     void setName(QString value);
 
+    // Reimplementing these for handshake between Tag and TagFile
     void append(const QList<TagFile *> &t);
     void append(TagFile * const &t);
     void insert(int i, TagFile *value);

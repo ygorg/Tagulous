@@ -1,12 +1,13 @@
 #include "tag.h"
 
 Tag::Tag(QString tagName)
-                    : QList<TagFile *>() {
+        : QList<TagFile *>() {
     _tagName = tagName;
     _bullet = QPixmap(100, 100);
 }
 
 void Tag::setBulletColor(QColor color) {
+    // Here we create a "bullet" this i what decorates the tag
     this->_color = color;
     _bullet.fill(QColor(0, 0, 0, 0));
 
@@ -63,7 +64,3 @@ void Tag::removeAt(int i) {
     at(i)->removeParentTag(this);
     QList::removeAt(i);
 }
-
-//TODO faire une classe qui hérite de QList<Tag *>
-// et qui représente les Tags
-// pour avoir un slot requestedAddFiles(int row, QList<TagFile *>)

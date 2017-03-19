@@ -27,32 +27,38 @@ class MainWindow : public QMainWindow
 
 private:
 
-    QStackedWidget *_stackedWidget = new QStackedWidget();
+    // The two principal widgets
     TagListWidget *_tagListWidget;
     FileListWidget *_fileListWidget;
-    QMap<QString, QAction *> *_actions = new QMap<QString, QAction *>;
 
+    TagList *_tagList; // The class containing all the data
+    TagListModelDropCheckable *_tagListModel; // A model for displaying tags
+
+    // Helper widgets
+    QStackedWidget *_stackedWidget = new QStackedWidget();
     QToolBar *_toolbar = new QToolBar(this);
     QMenuBar *_menuBar = new QMenuBar(0);
     QMenu *_menu = new QMenu(tr("File"));
 
-    TagList *_tagList;
-    TagListModelDropCheckable *_tagListModel;
+    // Actions
+    QAction *getAction(QString);
+    QMap<QString, QAction *> *_actions = new QMap<QString, QAction *>;
 
+    // Used for persistance
     QString _path = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
     QString _fileName = "save.xml";
+    TagList *loadPersistance();
+    void savePersistance(TagList *);
+
+
+    void createActions();
+    void hideWidget();
 
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    QAction *getAction(QString);
-
-    void createActions();
-    void hideWidget();
-
 private slots:
-    void addToolBarAction(QString);
     void showFileList(QModelIndexList *);
     void showTagList();
 

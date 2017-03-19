@@ -1,96 +1,73 @@
 #include "filelistwidget.h"
 
-FileListWidget::FileListWidget(QMap<QString, QAction *> *actions,
-                             QWidget *parent)
+FileListWidget::FileListWidget(QWidget *parent)
     : QWidget(parent) {
 
     /* Initialize the widgets and variables */
-    _actions = actions;
-    _layout = new QVBoxLayout;
-    _fileView = new QListViewDrop;
     _searchBox = new QLineEdit();
     _searchBox->setPlaceholderText(tr("Search"));
     _searchBox->setAttribute(Qt::WA_MacShowFocusRect, false);
     _searchBox->setObjectName("searchLineEdit");
 
-    _fileView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    _fileView->setDragEnabled(true);
-    _fileView->setAcceptDrops(true);
-    _fileView->setDropIndicatorShown(true);
-    _fileView->setAttribute(Qt::WA_MacShowFocusRect, false);
-    _fileView->setEditTriggers(QAbstractItemView::SelectedClicked);
-    connect(_fileView, SIGNAL(doubleClicked(QModelIndex)),
+    _view = new QListViewDrop;
+    _view->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    _view->setAcceptDrops(true);
+    _view->setDropIndicatorShown(true);
+    _view->setAttribute(Qt::WA_MacShowFocusRect, false);
+    connect(_view, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(requestOpenFile(QModelIndex)));
 
-    _proxyModel = new QSortFilterProxyModelFixed();
-    _proxyModel->setFilterRole(Qt::DisplayRole);
-    _proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-
-
-    connect(_searchBox, SIGNAL(textChanged(QString)),
-            _proxyModel, SLOT(setFilterRegExp(QString)));
+    //_proxyModel = new QSortFilterProxyModelFixed();
+    //_proxyModel->setFilterRole(Qt::DisplayRole);
+    //_proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    //connect(_searchBox, SIGNAL(textChanged(QString)),
+    //        _proxyModel, SLOT(setFilterRegExp(QString)));
+    _proxyModel = new QIdentityProxyModel;
+    _view->setModel(_proxyModel);
 
     /* Defining the layout */
+    _layout = new QVBoxLayout;
     _layout->setSpacing(0);
     _layout->setMargin(0);
     _layout->addWidget(_searchBox);
-    _layout->addWidget(_fileView);
-
+    _layout->addWidget(_view);
     this->setLayout(_layout);
 
 }
 
 void FileListWidget::setModel(FileListModel *model) {
-    _fileListModel = model;
-    connect(_fileView, SIGNAL(requestAddFiles(QList<QUrl>)),
-            _fileListModel, SLOT(addFiles(QList<QUrl>)));
-    _proxyModel->setSourceModel(_fileListModel);
-    _fileView->setModel(_proxyModel);
+    _model = model;
+    connect(_view, SIGNAL(requestAddFiles(QList<QUrl>)),
+            _model, SLOT(addFiles(QList<QUrl>)));
+    _proxyModel->setSourceModel(_model);
 }
 
-FileListModel *FileListWidget::getModel() {
-    return _fileListModel;
-}
-
-
-
-void FileListWidget::connectActions() {
-
-    /* Connect the wanted action to the wanted slot */
-    /* Tell if you want to action to be shown in the toolbar
-     * and/or the menu */
-
-    connect(_actions->value("add"), SIGNAL(triggered(bool)),
+void FileListWidget::connectActions(QMap<QString, QAction *> *actions) {
+    // General actions
+    connect(actions->value("add"), SIGNAL(triggered(bool)),
             this, SLOT(addElement()));
-    emit toolBarAction("add");
 
-    connect(_actions->value("copy"), SIGNAL(triggered(bool)),
+    connect(actions->value("copy"), SIGNAL(triggered(bool)),
             this, SLOT(copyElement()));
 
-    connect(_actions->value("paste"), SIGNAL(triggered(bool)),
+    connect(actions->value("paste"), SIGNAL(triggered(bool)),
             this, SLOT(pasteElement()));
 
-    connect(_actions->value("remove"), SIGNAL(triggered(bool)),
+    connect(actions->value("remove"), SIGNAL(triggered(bool)),
             this, SLOT(deleteElement()));
-    emit toolBarAction("remove");
 
-    connect(_actions->value("find"), SIGNAL(triggered(bool)),
+    connect(actions->value("find"), SIGNAL(triggered(bool)),
             this, SLOT(activateFind()));
-    emit toolBarAction("find");
 
-
-    connect(_actions->value("previous"), SIGNAL(triggered(bool)),
+    // Specific actions
+    connect(actions->value("previous"), SIGNAL(triggered(bool)),
             this, SLOT(previous()));
-    emit toolBarAction("previous");
 
-
-    connect(_actions->value("open"), SIGNAL(triggered(bool)),
+    connect(actions->value("open"), SIGNAL(triggered(bool)),
             this, SLOT(requestOpenFile()));
-    emit toolBarAction("open");
 
-    connect(_actions->value("openInExplorer"), SIGNAL(triggered(bool)),
+    connect(actions->value("openInExplorer"), SIGNAL(triggered(bool)),
             this, SLOT(requestOpenFileInFinder()));
-    emit toolBarAction("openInExplorer");
 
 }
 
@@ -106,21 +83,19 @@ void FileListWidget::addElement() {
 
     if (dialog->exec())
         fileNames = dialog->selectedFiles();
+    delete dialog;
 
-    _fileListModel->addFiles(fileNames);
+    _model->addFiles(fileNames);
 }
 
 void FileListWidget::deleteElement() {
-    /* Removing element from last to first as we operate on a list
-     * removing the first element moves all the other...
-     */
-
-    QModelIndexList indexes = _fileView->selectionModel()->selectedRows();
+    // Removing element from last to first as we operate on a list
+    QModelIndexList indexes = _view->selectionModel()->selectedRows();
     std::sort(indexes.begin(), indexes.end());
     QModelIndexList::reverse_iterator it;
 
     for(it = indexes.rbegin(); it != indexes.rend(); ++it) {
-        _fileView->model()->removeRow(it->row(), it->parent());
+        _view->model()->removeRow(it->row(), it->parent());
     }
 }
 void FileListWidget::copyElement() {
@@ -131,12 +106,14 @@ void FileListWidget::pasteElement() {
 }
 
 void FileListWidget::activateFind() {
+    // If ctrl+f if pressed setting focus in the search field
     _searchBox->setFocus();
 }
 
 
 void FileListWidget::previous() {
-    delete _fileListModel;
+    // The user want to go back to the tag view
+    delete _model;
     emit viewTagList();
 }
 
@@ -152,23 +129,27 @@ void openFile(QString path) {
 }
 
 void FileListWidget::requestOpenFile(QModelIndex index) {
-    openFile(index.data(FileListModel::MyRoles::PathRole).toString());
+    QString path = index.data(FileListModel::MyRoles::PathRole).toString();
+    openFile(path);
 }
 
-bool cancelMultipleOpenings(int len) {
-    QMessageBox msgBox;
-    msgBox.setText(QString("Are you sure to open %1 file%2.").arg(len).arg(len > 1 ? "s" : ""));
-    msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
-    msgBox.setDefaultButton(QMessageBox::Cancel);
-    return msgBox.exec() == QMessageBox::Cancel ? true : false;
+bool confirmMultipleOpenings(int len) {
+    // If trying to open more that thresold file asking for confirmation
+    static int thresold = 4;
+    if (len > thresold) {
+        QMessageBox msgBox;
+        msgBox.setText(QString("You are about to open %1 file%2.").arg(len).arg(len > 1 ? "s" : ""));
+        msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Cancel);
+        return msgBox.exec() == QMessageBox::Ok ? true : false;
+    }
+    return true;
 }
 
 void FileListWidget::requestOpenFile() {
-    QModelIndexList indexes = _fileView->selectionModel()->selectedRows();
-    if (indexes.length() > 4) {
-        if (cancelMultipleOpenings(indexes.length())) {
-            return;
-        }
+    QModelIndexList indexes = _view->selectionModel()->selectedRows();
+    if (!confirmMultipleOpenings(indexes.length())) {
+        return;
     }
     for (QModelIndex index : indexes) {
         requestOpenFile(index);
@@ -176,11 +157,9 @@ void FileListWidget::requestOpenFile() {
 }
 
 void FileListWidget::requestOpenFileInFinder() {
-    QModelIndexList indexes = _fileView->selectionModel()->selectedRows();
-    if (indexes.length() > 4) {
-        if (cancelMultipleOpenings(indexes.length())) {
-            return;
-        }
+    QModelIndexList indexes = _view->selectionModel()->selectedRows();
+    if (!confirmMultipleOpenings(indexes.length())) {
+        return;
     }
     for (QModelIndex index : indexes) {
         QString path = index.data(FileListModel::MyRoles::PathRole).toString();
@@ -189,4 +168,11 @@ void FileListWidget::requestOpenFileInFinder() {
         }
         openFile(path);
     }
+}
+
+FileListWidget::~FileListWidget() {
+    delete _layout;
+    delete _view;
+    delete _searchBox;
+    delete _proxyModel;
 }

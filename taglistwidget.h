@@ -9,10 +9,11 @@
 #include <QAction>
 #include <QMap>
 #include <qsortfilterproxymodelfixed.h>
+#include <QIdentityProxyModel>
 #include <QAbstractItemModel>
-#include <QPushButton>
 #include <QDebug>
 
+#include <QPushButton>
 
 #include "taglistmodeldropcheckable.h"
 
@@ -20,26 +21,24 @@ class TagListWidget : public QWidget
 {
     Q_OBJECT
 private:
-    QMap<QString, QAction *> *_actions;
-
-    QVBoxLayout *_layout;
-
-    QLineEdit *_searchBox;
-    QListView *_tagView;
-
-    QPushButton *_filterValidateButton;
-
-    TagListModelDropCheckable *_tagListModel;
+    // The model to be displayed and its proxy to filter
+    TagListModelDropCheckable *_model;
     QAbstractProxyModel *_proxyModel;
 
+    QVBoxLayout *_layout;
+    QLineEdit *_searchBox;
+    QListView *_view;
+
+    QPushButton *_filterValidateButton;
     bool filterIsOn = false;
 public:
-    explicit TagListWidget(TagListModelDropCheckable *, QMap<QString, QAction *> *, QWidget *parent=0);
+    explicit TagListWidget(QWidget *parent=0);
     ~TagListWidget();
-    void connectActions();
+
+    void connectActions(QMap<QString, QAction *> *);
+    void setModel(TagListModelDropCheckable *);
 
 signals:
-    void toolBarAction(QString);
     void viewFileList(QModelIndexList *);
 
 public slots:

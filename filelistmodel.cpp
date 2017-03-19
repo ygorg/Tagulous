@@ -26,36 +26,33 @@ int FileListModel::rowCount(const QModelIndex &parent) const {
     return length;
 }
 
+TagFile *FileListModel::getFile(int row)  const{
+    int length = 0;
+    for (Tag *tag : *_tagList) {
+        if (row - length < tag->length()) {
+            return tag->at(row - length);
+        }
+        length += tag->length();
+    }
+    return nullptr;
+}
+
 QVariant FileListModel::data(const QModelIndex &index, int role) const {
     if (role == Qt::DisplayRole) {
-        int length = 0;
-        for (Tag *tag : *_tagList) {
-            if (index.row() - length < tag->length()) {
-                return tag->at(index.row() - length)->getName();
-            }
-            length += tag->length();
-        }
+        return getFile(index.row())->getName();
 
     } else if (role == Qt::DecorationRole) {
-        int length = 0;
-        for (Tag *tag : *_tagList) {
-            if (index.row() - length < tag->length()) {
-                return tag->at(index.row() - length)->getIcon();
-            }
-            length += tag->length();
-        }
+        return getFile(index.row())->getIcon();
+
     } else if (role == MyRoles::PathRole) {
-        int length = 0;
-        for (Tag *tag : *_tagList) {
-            if (index.row() - length < tag->length()) {
-                return tag->at(index.row() - length)->getPath();
-            }
-            length += tag->length();
-        }
+        return getFile(index.row())->getPath();
+
     } else if (role == Qt::SizeHintRole) {
         return QSize(10, 30);
+
     } else if (role == Qt::FontRole) {
         return QFont("", 12);
+
     }
     return QVariant();
 }
@@ -65,9 +62,7 @@ bool FileListModel::removeRows(int row, int count,
     if (parent.isValid())
         row = parent.row();
 
-    //c'est dans la doc de faire ça
     emit beginRemoveRows(parent, row, row+count);
-    //et voilà ce qu'on fait vraiment
 
     int length = 0;
     for (Tag *tag : *_tagList) {
@@ -81,7 +76,7 @@ bool FileListModel::removeRows(int row, int count,
         }
         length += tag->length();
     }
-    //c'est dans la doc de faire ça
+
     emit endRemoveRows();
     return true;
 }

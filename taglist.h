@@ -5,13 +5,14 @@
 #include <QXmlStreamWriter>
 #include <QList>
 #include <QColor>
+#include <QFileInfo>
 
 #include "tag.h"
 
 
 class TagList : public QList<Tag *>
 {
-
+    // A simple wrapper to implement fromXML and toXML
 public:
     TagList();
 

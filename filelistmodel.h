@@ -10,15 +10,21 @@
 #import "tagfile.h"
 
 class FileListModel : public QAbstractListModel {
+    // A model representing tagged files
+    // This is where all the magic happens
     Q_OBJECT
 private:
     QList<Tag*> *_tagList;
 public:
     enum MyRoles {
-        PathRole = Qt::UserRole + 1,   /**< This role holds the object itself. */
+        PathRole = Qt::UserRole + 1 // This role is used to get the path of a file
     };
-    FileListModel(QList<Tag*> *list, QObject *parent=0);
-    FileListModel(Tag *tag, QObject *parent=0);
+    FileListModel(QList<Tag*> *, QObject *parent=0);
+    FileListModel(Tag *, QObject *parent=0); // convenience constructor
+
+    TagFile *getFile(int) const;
+
+
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     bool removeRows(int row, int count, const QModelIndex &parent) override;

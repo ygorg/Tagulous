@@ -68,6 +68,7 @@ void TagFile::deleteTagFile(TagFile *file) {
 }
 
 TagFile *TagFile::find(QString path) {
+    // Searching for an existing file
     for (TagFile *file : *instances) {
         if (file->getPath() == path) {
             return file;

@@ -3,8 +3,8 @@
 
 #include "taglistmodeldrop.h"
 
-class TagListModelDropCheckable : public TagListModelDrop
-{
+class TagListModelDropCheckable : public TagListModelDrop {
+    // This model add support for selecting tags using checkboxes
 private:
     bool filterIsOn = false;
     QHash<Tag *, int> *checkState = new QHash<Tag *, int>;

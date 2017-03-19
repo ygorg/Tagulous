@@ -3,8 +3,8 @@
 
 #include "taglistmodel.h"
 
-class TagListModelDrop : public TagListModel
-{
+class TagListModelDrop : public TagListModel {
+    //This model add support for dropping files on tags
 public:
     TagListModelDrop(TagList *tagList, QObject *parent=0);
 

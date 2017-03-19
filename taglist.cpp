@@ -1,5 +1,5 @@
 #include "taglist.h"
-
+#include <QDebug>
 TagList::TagList()
     : QList<Tag *>()
 {}
@@ -46,7 +46,8 @@ void TagList::fromXML(QXmlStreamReader *reader) {
             break;
         case QXmlStreamReader::Characters:
             if (inFile) {
-                currentFile = TagFile::find(reader->text().toString());
+                QString path = reader->text().toString();
+                currentFile = TagFile::find(path);
             }
             break;
         default:
@@ -73,6 +74,7 @@ void TagList::toXML(QXmlStreamWriter *writer) {
         writer->writeAttribute("color", colorStr);
 
         for (TagFile *file : *tag) {
+            QString path = file->getPath();
             writer->writeStartElement("file");
             writer->writeCharacters(file->getPath());
             writer->writeEndElement();

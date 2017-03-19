@@ -11,10 +11,6 @@
 #include "taglist.h"
 
 class TagListModel : public QAbstractListModel {
-/* Un modele qui fait l'interface entre une liste de Tag
-* et Qt pour gerer l'affichage et tout
-* La on hérite du QAbstractListModel parce qu'on veut
-* représenter une liste de tag */
     Q_OBJECT
 protected:
     TagList *_tags;

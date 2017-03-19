@@ -1,37 +1,30 @@
 #include "taglistwidget.h"
 #include <QIdentityProxyModel>
-TagListWidget::TagListWidget(TagListModelDropCheckable *tagListModel,
-                             QMap<QString, QAction *> *actions,
-                             QWidget *parent)
+TagListWidget::TagListWidget(QWidget *parent)
     : QWidget(parent) {
 
     /* Initialize the widgets and variables */
-    _actions = actions;
-    _tagListModel = tagListModel;
-    _layout = new QVBoxLayout;
-    _tagView = new QListView;
     _searchBox = new QLineEdit();
     _searchBox->setPlaceholderText(tr("Search"));
     _searchBox->setAttribute(Qt::WA_MacShowFocusRect, false);
     _searchBox->setObjectName("searchLineEdit");
 
-    _proxyModel = new QIdentityProxyModel();
+    _view = new QListView;
+    _view->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    _view->setAcceptDrops(true);
+    _view->setDropIndicatorShown(true);
+    _view->setAttribute(Qt::WA_MacShowFocusRect, false);
+    _view->setEditTriggers(QAbstractItemView::SelectedClicked);
+    connect(_view, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(doubleClicked(QModelIndex)));
+
+    //_proxyModel = new QSortFilterProxyModelFixed();
     //_proxyModel->setFilterRole(Qt::DisplayRole);
     //_proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-    _proxyModel->setSourceModel(_tagListModel);
-
     //connect(_searchBox, SIGNAL(textChanged(QString)),
     //        _proxyModel, SLOT(setFilterRegExp(QString)));
-
-    _tagView->setModel(_proxyModel);
-    _tagView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    _tagView->setDragEnabled(true);
-    _tagView->setAcceptDrops(true);
-    _tagView->setDropIndicatorShown(true);
-    _tagView->setAttribute(Qt::WA_MacShowFocusRect, false);
-    _tagView->setEditTriggers(QAbstractItemView::SelectedClicked);
-    connect(_tagView, SIGNAL(doubleClicked(QModelIndex)),
-            this, SLOT(doubleClicked(QModelIndex)));
+    _proxyModel = new QIdentityProxyModel();
+    _view->setModel(_proxyModel);
 
     _filterValidateButton = new QPushButton(tr("Ok"));
     _filterValidateButton->hide();
@@ -39,79 +32,60 @@ TagListWidget::TagListWidget(TagListModelDropCheckable *tagListModel,
             this, SLOT(requestedFilter()));
 
     /* Defining the layout */
+    _layout = new QVBoxLayout;
     _layout->setSpacing(0);
     _layout->setMargin(0);
     _layout->addWidget(_searchBox);
-    _layout->addWidget(_tagView);
+    _layout->addWidget(_view);
     _layout->addWidget(_filterValidateButton);
     this->setLayout(_layout);
 }
 
+void TagListWidget::setModel(TagListModelDropCheckable *model) {
+    _model = model;
+    _proxyModel->setSourceModel(_model);
+}
 
-void TagListWidget::connectActions() {
-
-    /* Connect the wanted action to the wanted slot */
-    /* Tell if you want to action to be shown in the toolbar
-     * and/or the menu */
-
-    connect(_actions->value("add"), SIGNAL(triggered(bool)),
+void TagListWidget::connectActions(QMap<QString, QAction *> *actions) {
+    // General actions
+    connect(actions->value("add"), SIGNAL(triggered(bool)),
             this, SLOT(addElement()));
-    emit toolBarAction("add");
 
-
-    connect(_actions->value("copy"), SIGNAL(triggered(bool)),
+    connect(actions->value("copy"), SIGNAL(triggered(bool)),
             this, SLOT(copyElement()));
 
-
-    connect(_actions->value("paste"), SIGNAL(triggered(bool)),
+    connect(actions->value("paste"), SIGNAL(triggered(bool)),
             this, SLOT(pasteElement()));
 
-
-    connect(_actions->value("remove"), SIGNAL(triggered(bool)),
+    connect(actions->value("remove"), SIGNAL(triggered(bool)),
             this, SLOT(deleteElement()));
-    emit toolBarAction("remove");
 
-    connect(_actions->value("find"), SIGNAL(triggered(bool)),
+    connect(actions->value("find"), SIGNAL(triggered(bool)),
             this, SLOT(activateFind()));
-    emit toolBarAction("find");
 
-
-    connect(_actions->value("rename"), SIGNAL(triggered(bool)),
+    // Specific actions
+    connect(actions->value("rename"), SIGNAL(triggered(bool)),
             this, SLOT(renameElement()));
-    emit toolBarAction("rename");
 
-
-    //connect(_actions->value("filter"), SIGNAL(triggered(bool)),
-    //        _tagListModel, SLOT(toggleFilter()));
-    connect(_actions->value("filter"), SIGNAL(triggered(bool)),
+    connect(actions->value("filter"), SIGNAL(triggered(bool)),
             this, SLOT(filterTags()));
-    emit toolBarAction("filter");
-
 }
 
 void TagListWidget::addElement() {
-    _tagView->model()->insertRow(_tagView->model()->rowCount());
+    // Add a new empty tag to the end of the list
+    QAbstractItemModel *model = _view->model();
+    model->insertRow(model->rowCount());
 }
 
 void TagListWidget::deleteElement() {
-    /* Removing element from last to first as we operate on a list
-     * removing the first element moves all the other...
-     */
-    QModelIndexList indexes = _tagView->selectionModel()->selectedRows();
+    // Removing element from last to first as we operate on a list
+    QModelIndexList indexes = _view->selectionModel()->selectedRows();
     std::sort(indexes.begin(), indexes.end());
     QModelIndexList::reverse_iterator it;
 
     for(it = indexes.rbegin(); it != indexes.rend(); ++it) {
-        _tagView->model()->removeRow(it->row(), it->parent());
+        _view->model()->removeRow(it->row(), it->parent());
     }
-}
-
-void TagListWidget::renameElement() {
-    if (_tagView->selectionModel()->selectedRows().length() <= 0) {
-        return;
-    }
-    /* Editing the first item if more than one is selected */
-    _tagView->edit(_tagView->selectionModel()->selectedRows().at(0));
 }
 
 void TagListWidget::copyElement() {
@@ -121,14 +95,28 @@ void TagListWidget::pasteElement() {
     qDebug() << "Paste on tags to be implemented";
 }
 
-void TagListWidget::activateFind() {    
+void TagListWidget::activateFind() {
+    // If ctrl+f if pressed setting focus in the search field
     _searchBox->setFocus();
 }
 
+void TagListWidget::renameElement() {
+    // Triggers the editting of a selected element
+    QModelIndexList selectedIndexes = _view->selectionModel()->selectedRows();
+    if (selectedIndexes.length() <= 0) {
+        return;
+    }
+    std::sort(selectedIndexes.begin(), selectedIndexes.end());
+    /* Editing the first item if more than one is selected */
+    _view->edit(selectedIndexes.at(0));
+}
+
 void TagListWidget::filterTags() {
-    //TODO here add checkboxes in front of the tags
+    // Here the user wants to see the files of multiple tags
+    // checkboxes are shown in front of the tags
+    // a "Ok" button appears to validate the selection
     filterIsOn = !filterIsOn;
-    _tagListModel->toggleFilter(filterIsOn);
+    _model->toggleFilter(filterIsOn);
     if (filterIsOn) {
         _filterValidateButton->show();
     } else {
@@ -137,7 +125,9 @@ void TagListWidget::filterTags() {
 }
 
 void TagListWidget::requestedFilter() {
-    QModelIndexList *indexes = _tagListModel->getChecked();
+    // The user activated the filter mode and clicked on "Ok"
+    // we show the files the user asked for
+    QModelIndexList *indexes = _model->getChecked();
     if (indexes->length() == 0) {
         return;
     }
@@ -145,6 +135,8 @@ void TagListWidget::requestedFilter() {
 }
 
 void TagListWidget::doubleClicked(QModelIndex index) {
+    // The user double clicked on an item
+    // we show the files associated with the tag double clicked
     if (!index.isValid()) {
         return;
     }
@@ -156,7 +148,7 @@ void TagListWidget::doubleClicked(QModelIndex index) {
 
 TagListWidget::~TagListWidget() {
     delete _layout;
-    delete _tagView;
+    delete _view;
     delete _searchBox;
     delete _proxyModel;
 }

@@ -12,11 +12,10 @@
 class Tag;
 
 class TagFile : public QObject {
-    /* Représente un fichier dans un Tag
-     * On sait jamais si il faudra des membres
-     * ou des méthodes en plus mieux vaux faire une classe direct */
+    // A TagFile is a file that is associated with a/some Tag
       Q_OBJECT
     private:
+        // We keep track of every TagFile created
         static QSet<TagFile *> *instances;
 
         QList<Tag *> *_parentTags = new QList<Tag *>;
@@ -24,6 +23,8 @@ class TagFile : public QObject {
         QString _name;
         QIcon _icon;
 
+        // The constructor is private to prevent multiple TagFile
+        // with the same path to exist
         explicit TagFile(QString filePath);
 
     public:

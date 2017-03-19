@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
     a.setAttribute(Qt::AA_EnableHighDpiScaling);
 
     MainWindow w;
+    // Resizing the window for the toolbar not to be splitted
     w.setMinimumWidth(280);
     w.show();
 
