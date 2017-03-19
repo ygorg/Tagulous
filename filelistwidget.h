@@ -8,9 +8,13 @@
 #include <QMenuBar>
 #include <QAction>
 #include <QMap>
-
+#include <QMimeData>
+#include <QFileDialog>
 #include <qsortfilterproxymodelfixed.h>
 #include <QAbstractItemModel>
+#include <QDesktopServices>
+#include <QMessageBox>
+#include <QDebug>
 
 #include "filelistmodel.h"
 
@@ -73,8 +77,9 @@ public slots:
     void activateFind();
 
     void previous();
-    void openFile();
-    void openFileInFinder();
+    void requestOpenFile();
+    void requestOpenFile(QModelIndex index);
+    void requestOpenFileInFinder();
 };
 
 #endif // FILELISTWIDGET_H

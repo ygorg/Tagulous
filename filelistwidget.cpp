@@ -1,5 +1,4 @@
 #include "filelistwidget.h"
-#include <QDebug>
 
 FileListWidget::FileListWidget(QMap<QString, QAction *> *actions,
                              QWidget *parent)
@@ -18,6 +17,9 @@ FileListWidget::FileListWidget(QMap<QString, QAction *> *actions,
     _fileView->setDropIndicatorShown(true);
     _fileView->setAttribute(Qt::WA_MacShowFocusRect, false);
     _fileView->setEditTriggers(QAbstractItemView::SelectedClicked);
+    connect(_fileView, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(requestOpenFile(QModelIndex)));
+
     _proxyModel = new QSortFilterProxyModelFixed();
     _proxyModel->setFilterRole(Qt::DisplayRole);
     _proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
@@ -29,7 +31,9 @@ FileListWidget::FileListWidget(QMap<QString, QAction *> *actions,
     /* Defining the layout */
     _layout->addWidget(_searchBox);
     _layout->addWidget(_fileView);
+
     this->setLayout(_layout);
+
 }
 
 void FileListWidget::setModel(FileListModel *model) {
@@ -53,7 +57,7 @@ void FileListWidget::connectActions() {
      * and/or the menu */
 
     connect(_actions->value("add"), SIGNAL(triggered(bool)),
-            this, SLOT(requestedAddFiles()));
+            this, SLOT(addElement()));
     emit toolBarAction("add");
 
     connect(_actions->value("copy"), SIGNAL(triggered(bool)),
@@ -77,11 +81,11 @@ void FileListWidget::connectActions() {
 
 
     connect(_actions->value("open"), SIGNAL(triggered(bool)),
-            this, SLOT(openFile()));
+            this, SLOT(requestOpenFile()));
     emit toolBarAction("open");
 
     connect(_actions->value("openInExplorer"), SIGNAL(triggered(bool)),
-            this, SLOT(openFileInFinder()));
+            this, SLOT(requestOpenFileInFinder()));
     emit toolBarAction("openInExplorer");
 
 }
@@ -131,13 +135,53 @@ void FileListWidget::previous() {
     emit viewTagList();
 }
 
-
-void FileListWidget::openFile() {
-    qDebug() << "Multi selection to be implemented";
-    //QModelIndexList indexes
+void openFile(QUrl url) {
+    QDesktopServices::openUrl(url);
 }
 
-void FileListWidget::openFileInFinder() {
-    qDebug() << "Openning files in finder to be implemented";
-    //QModelIndexList indexes
+void openFile(QString path) {
+    if (!path.startsWith("file://")) {
+        path  = "file://" + path;
+    }
+    openFile(QUrl(path));
+}
+
+void FileListWidget::requestOpenFile(QModelIndex index) {
+    openFile(index.data(FileListModel::MyRoles::PathRole).toString());
+}
+
+bool cancelMultipleOpenings(int len) {
+    QMessageBox msgBox;
+    msgBox.setText(QString("Are you sure to open %1 file%2.").arg(len).arg(len > 1 ? "s" : ""));
+    msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Cancel);
+    return msgBox.exec() == QMessageBox::Cancel ? true : false;
+}
+
+void FileListWidget::requestOpenFile() {
+    QModelIndexList indexes = _fileView->selectionModel()->selectedRows();
+    if (indexes.length() > 4) {
+        if (cancelMultipleOpenings(indexes.length())) {
+            return;
+        }
+    }
+    for (QModelIndex index : indexes) {
+        requestOpenFile(index);
+    }
+}
+
+void FileListWidget::requestOpenFileInFinder() {
+    QModelIndexList indexes = _fileView->selectionModel()->selectedRows();
+    if (indexes.length() > 4) {
+        if (cancelMultipleOpenings(indexes.length())) {
+            return;
+        }
+    }
+    for (QModelIndex index : indexes) {
+        QString path = index.data(FileListModel::MyRoles::PathRole).toString();
+        if (!QDir(path).exists()) {
+            path = path.section('/', 0, -2);
+        }
+        openFile(path);
+    }
 }
