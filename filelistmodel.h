@@ -14,6 +14,9 @@ class FileListModel : public QAbstractListModel {
 private:
     QList<Tag*> *_tagList;
 public:
+    enum MyRoles {
+        PathRole = Qt::UserRole + 1,   /**< This role holds the object itself. */
+    };
     FileListModel(QList<Tag*> *list, QObject *parent=0);
     FileListModel(Tag *tag, QObject *parent=0);
     int rowCount(const QModelIndex &parent) const override;
@@ -21,6 +24,7 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value,
                  int role) override;
     bool removeRows(int row, int count, const QModelIndex &parent) override;
+    QHash<int,QByteArray>roleNames() const override;
 
 
 };

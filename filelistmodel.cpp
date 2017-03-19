@@ -13,6 +13,12 @@ FileListModel::FileListModel(Tag *tag, QObject *parent)
     _tagList->append(tag);
 }
 
+QHash<int,QByteArray> FileListModel::roleNames() const {
+    QHash<int, QByteArray> roles = QAbstractListModel::roleNames();
+    roles[MyRoles::PathRole] = "role_path";
+    return roles;
+}
+
 int FileListModel::rowCount(const QModelIndex &parent) const {
     Q_UNUSED(parent)
     int length = 0;
@@ -37,6 +43,14 @@ QVariant FileListModel::data(const QModelIndex &index, int role) const {
         for (Tag *tag : *_tagList) {
             if (index.row() - length < tag->length()) {
                 return tag->at(index.row() - length)->getIcon();
+            }
+            length += tag->length();
+        }
+    } else if (role == MyRoles::PathRole) {
+        int length = 0;
+        for (Tag *tag : *_tagList) {
+            if (index.row() - length < tag->length()) {
+                return tag->at(index.row() - length)->getPath();
             }
             length += tag->length();
         }
