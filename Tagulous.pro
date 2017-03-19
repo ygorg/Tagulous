@@ -42,7 +42,8 @@ HEADERS  += mainwindow.h\
     filelistmodel.h \
     taglistmodeldrop.h \
     taglistwidget.h \
-    filelistwidget.h
+    filelistwidget.h \
+    qsortfilterproxymodelfixed.h
 
 RESOURCES += \
     resources.qrc
