@@ -23,14 +23,14 @@ MainWindow::MainWindow(QWidget *parent) :
         qDebug() << "Unable to load the data.";
     }
 
-    _tagListModel = new TagListModelDrop(_tagList);
+    _tagListModel = new TagListModelDropCheckable(_tagList);
 
     _tagListWidget = new TagListWidget(_tagListModel, _actions);    
     connect(_tagListWidget, SIGNAL(toolBarAction(QString)),
             this, SLOT(addToolBarAction(QString)));
 
-    connect(_tagListWidget, SIGNAL(viewFileList(int)),
-            this, SLOT(showFileList(int)));
+    connect(_tagListWidget, SIGNAL(viewFileList(QModelIndexList *)),
+            this, SLOT(showFileList(QModelIndexList *)));
 
     _fileListWidget = new FileListWidget(_actions);
     connect(_fileListWidget, SIGNAL(toolBarAction(QString)),
@@ -76,7 +76,7 @@ void MainWindow::showTagList() {
     _stackedWidget->setCurrentWidget(_tagListWidget);
 }
 
-void MainWindow::showFileList(int row) {
+void MainWindow::showFileList(QModelIndexList *indexes) {
 
     hideWidget();
 
@@ -84,7 +84,13 @@ void MainWindow::showFileList(int row) {
     _menu->addAction(getAction("openInExplorer"));
     _menu->addAction(getAction("open"));
 
-    FileListModel *m = new FileListModel(_tagList->at(row));
+    QList<Tag *> *lst = new QList<Tag *>;
+    for (QModelIndex index : *indexes) {
+        lst->append(_tagList->at(index.row()));
+    }
+    delete indexes;
+
+    FileListModel *m = new FileListModel(lst);
     _fileListWidget->setModel(m);
 
     _fileListWidget->connectActions();

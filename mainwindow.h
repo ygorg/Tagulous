@@ -12,10 +12,10 @@
 #include <QMapIterator>
 #include <QStackedWidget>
 #include <QDebug>
+#include <QModelIndexList>
 
 #include "taglist.h"
-#include "taglistmodel.h"
-#include "taglistmodeldrop.h"
+#include "taglistmodeldropcheckable.h"
 #include "filelistmodel.h"
 
 #include "taglistwidget.h"
@@ -37,7 +37,7 @@ private:
     QMenu *_menu = new QMenu(tr("File"));
 
     TagList *_tagList;
-    TagListModel *_tagListModel;
+    TagListModelDropCheckable *_tagListModel;
 
     QString _path = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
     QString _fileName = "save.xml";
@@ -53,7 +53,7 @@ public:
 
 private slots:
     void addToolBarAction(QString);
-    void showFileList(int row);
+    void showFileList(QModelIndexList *);
     void showTagList();
 
 };

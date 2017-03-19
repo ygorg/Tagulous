@@ -10,10 +10,11 @@
 #include <QMap>
 #include <qsortfilterproxymodelfixed.h>
 #include <QAbstractItemModel>
+#include <QPushButton>
 #include <QDebug>
 
 
-#include "taglistmodel.h"
+#include "taglistmodeldropcheckable.h"
 
 class TagListWidget : public QWidget
 {
@@ -26,16 +27,20 @@ private:
     QLineEdit *_searchBox;
     QListView *_tagView;
 
-    QAbstractItemModel *_tagListModel;
-    QSortFilterProxyModel *_proxyModel;
+    QPushButton *_filterValidateButton;
+
+    TagListModelDropCheckable *_tagListModel;
+    QAbstractProxyModel *_proxyModel;
+
+    bool filterIsOn = false;
 public:
-    explicit TagListWidget(TagListModel *, QMap<QString, QAction *> *, QWidget *parent=0);
+    explicit TagListWidget(TagListModelDropCheckable *, QMap<QString, QAction *> *, QWidget *parent=0);
     ~TagListWidget();
     void connectActions();
 
 signals:
     void toolBarAction(QString);
-    void viewFileList(int);
+    void viewFileList(QModelIndexList *);
 
 public slots:
     void addElement();
@@ -45,6 +50,7 @@ public slots:
     void activateFind();
 
     void filterTags();
+    void requestedFilter();
     void renameElement();
     void doubleClicked(QModelIndex);
 };

@@ -1,6 +1,6 @@
 #include "taglistwidget.h"
-
-TagListWidget::TagListWidget(TagListModel *tagListModel,
+#include <QIdentityProxyModel>
+TagListWidget::TagListWidget(TagListModelDropCheckable *tagListModel,
                              QMap<QString, QAction *> *actions,
                              QWidget *parent)
     : QWidget(parent) {
@@ -14,9 +14,9 @@ TagListWidget::TagListWidget(TagListModel *tagListModel,
     _searchBox->setPlaceholderText(tr("Search"));
     _searchBox->setAttribute(Qt::WA_MacShowFocusRect, false);
 
-    _proxyModel = new QSortFilterProxyModelFixed();
-    _proxyModel->setFilterRole(Qt::DisplayRole);
-    _proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    _proxyModel = new QIdentityProxyModel();
+    //_proxyModel->setFilterRole(Qt::DisplayRole);
+    //_proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     _proxyModel->setSourceModel(_tagListModel);
 
     connect(_searchBox, SIGNAL(textChanged(QString)),
@@ -32,11 +32,17 @@ TagListWidget::TagListWidget(TagListModel *tagListModel,
     connect(_tagView, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(doubleClicked(QModelIndex)));
 
+    _filterValidateButton = new QPushButton(tr("Ok"));
+    _filterValidateButton->hide();
+    connect(_filterValidateButton, SIGNAL(clicked(bool)),
+            this, SLOT(requestedFilter()));
+
     /* Defining the layout */
     _layout->setSpacing(0);
     _layout->setMargin(0);
     _layout->addWidget(_searchBox);
     _layout->addWidget(_tagView);
+    _layout->addWidget(_filterValidateButton);
     this->setLayout(_layout);
 }
 
@@ -74,6 +80,8 @@ void TagListWidget::connectActions() {
     emit toolBarAction("rename");
 
 
+    //connect(_actions->value("filter"), SIGNAL(triggered(bool)),
+    //        _tagListModel, SLOT(toggleFilter()));
     connect(_actions->value("filter"), SIGNAL(triggered(bool)),
             this, SLOT(filterTags()));
     emit toolBarAction("filter");
@@ -118,7 +126,21 @@ void TagListWidget::activateFind() {
 
 void TagListWidget::filterTags() {
     //TODO here add checkboxes in front of the tags
-    qDebug() << "Multi selection to be implemented";
+    filterIsOn = !filterIsOn;
+    _tagListModel->toggleFilter(filterIsOn);
+    if (filterIsOn) {
+        _filterValidateButton->show();
+    } else {
+        _filterValidateButton->hide();
+    }
+}
+
+void TagListWidget::requestedFilter() {
+    QModelIndexList *indexes = _tagListModel->getChecked();
+    if (indexes->length() == 0) {
+        return;
+    }
+    emit viewFileList(indexes);
 }
 
 void TagListWidget::doubleClicked(QModelIndex index) {
@@ -126,7 +148,9 @@ void TagListWidget::doubleClicked(QModelIndex index) {
         return;
     }
     /* We want to change view so we SIGNAL it */
-    emit viewFileList(index.row());
+    QModelIndexList *indexes = new QModelIndexList();
+    indexes->append(index);
+    emit viewFileList(indexes);
 }
 
 TagListWidget::~TagListWidget() {

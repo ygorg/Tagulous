@@ -32,7 +32,8 @@ SOURCES += main.cpp\
     filelistmodel.cpp \
     taglistmodeldrop.cpp \
     taglistwidget.cpp \
-    filelistwidget.cpp
+    filelistwidget.cpp \
+    taglistmodeldropcheckable.cpp
 
 HEADERS  += mainwindow.h\
             tag.h \
@@ -43,7 +44,8 @@ HEADERS  += mainwindow.h\
     taglistmodeldrop.h \
     taglistwidget.h \
     filelistwidget.h \
-    qsortfilterproxymodelfixed.h
+    qsortfilterproxymodelfixed.h \
+    taglistmodeldropcheckable.h
 
 RESOURCES += \
     resources.qrc
