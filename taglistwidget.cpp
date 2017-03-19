@@ -11,7 +11,8 @@ TagListWidget::TagListWidget(TagListModel *tagListModel,
     _tagListModel = tagListModel;
     _layout = new QVBoxLayout;
     _tagView = new QListView;
-    _searchBox = new QLineEdit(tr("Search"));
+    _searchBox = new QLineEdit();
+    _searchBox->setPlaceholderText(tr("Search"));
 
     _tagView->setModel(_tagListModel);
     _tagView->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -98,8 +99,8 @@ void TagListWidget::pasteElement() {
     qDebug() << "Paste on tags to be implemented";
 }
 
-void TagListWidget::activateFind() {
-    qDebug() << "Activate Find to be implemented";
+void TagListWidget::activateFind() {    
+    _searchBox->setFocus();
 }
 
 void TagListWidget::filterTags() {

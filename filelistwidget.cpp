@@ -8,8 +8,9 @@ FileListWidget::FileListWidget(QMap<QString, QAction *> *actions,
     /* Initialize the widgets and variables */
     _actions = actions;
     _layout = new QVBoxLayout;
-    _fileView = new QListView;
-    _searchBox = new QLineEdit(tr("Search"));
+    _fileView = new QListViewDrop;
+    _searchBox = new QLineEdit();
+    _searchBox->setPlaceholderText(tr("Search"));
 
     _fileView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     _fileView->setDragEnabled(true);
@@ -101,7 +102,7 @@ void FileListWidget::pasteElement() {
 }
 
 void FileListWidget::activateFind() {
-    qDebug() << "Activate Find to be implemented";
+    _searchBox->setFocus();
 }
 
 
