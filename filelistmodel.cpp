@@ -58,15 +58,6 @@ QVariant FileListModel::data(const QModelIndex &index, int role) const {
     return QVariant();
 }
 
-bool FileListModel::setData(const QModelIndex &index, const QVariant &value,
-                            int role) {
-    Q_UNUSED(index)
-    Q_UNUSED(value)
-    Q_UNUSED(role)
-    // on n'est rien censé pouvoir modifier
-    return false;
-}
-
 bool FileListModel::removeRows(int row, int count,
                 const QModelIndex &parent) {
     if (parent.isValid())
@@ -93,5 +84,9 @@ bool FileListModel::removeRows(int row, int count,
     return true;
 }
 
+Qt::ItemFlags FileListModel::flags(const QModelIndex &index) const {
+/* renvoie des infos sur les actions possibles sur l'élement */
+    return QAbstractListModel::flags(index);
+}
 
 
