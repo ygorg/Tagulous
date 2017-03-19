@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
                     "   background: rgb(200, 200, 200, 150);"
                     "   color: rgb(0, 0, 0);"
                     "}"
-                    "QLineEdit {"
+                    "QLineEdit#searchLineEdit {"
                     "   margin: 5 10 5 10;"
                     "}");
     a.setAttribute(Qt::AA_UseHighDpiPixmaps);

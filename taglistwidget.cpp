@@ -13,14 +13,15 @@ TagListWidget::TagListWidget(TagListModelDropCheckable *tagListModel,
     _searchBox = new QLineEdit();
     _searchBox->setPlaceholderText(tr("Search"));
     _searchBox->setAttribute(Qt::WA_MacShowFocusRect, false);
+    _searchBox->setObjectName("searchLineEdit");
 
     _proxyModel = new QIdentityProxyModel();
     //_proxyModel->setFilterRole(Qt::DisplayRole);
     //_proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     _proxyModel->setSourceModel(_tagListModel);
 
-    connect(_searchBox, SIGNAL(textChanged(QString)),
-            _proxyModel, SLOT(setFilterRegExp(QString)));
+    //connect(_searchBox, SIGNAL(textChanged(QString)),
+    //        _proxyModel, SLOT(setFilterRegExp(QString)));
 
     _tagView->setModel(_proxyModel);
     _tagView->setSelectionMode(QAbstractItemView::ExtendedSelection);
