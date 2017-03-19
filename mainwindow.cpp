@@ -100,7 +100,7 @@ void MainWindow::createActions() {
      * /System/Library/CoreServices/SystemAppearance.bundle/Contents/Resources
      */
     // General Actions
-    QAction *addAction = new QAction(QIcon::fromTheme("list-add"), tr("Add"), this);
+    QAction *addAction = new QAction(QIcon(":icons/add@2x"), tr("Add"), this);
     addAction->setShortcut(QKeySequence::New);
     _actions->insert("add", addAction);
 
@@ -114,7 +114,7 @@ void MainWindow::createActions() {
     _actions->insert("paste", pasteAction);
 
 
-    QAction *removeAction = new QAction(tr("Remove"), this);
+    QAction *removeAction = new QAction(QIcon(":icons/remove@2x"), tr("Remove"), this);
 #ifdef Q_OS_MAC
     removeAction->setShortcut(QKeySequence(Qt::Key_Backspace));
 #else
@@ -122,7 +122,7 @@ void MainWindow::createActions() {
 #endif /* Q_OS_MAC */
     _actions->insert("remove", removeAction);
 
-    QAction *findAction = new QAction(tr("Search"), this);
+    QAction *findAction = new QAction(QIcon(":icons/search@2x"), tr("Search"), this);
     findAction->setShortcut(QKeySequence::Find);
     _actions->insert("find", findAction);
 
@@ -150,6 +150,7 @@ void MainWindow::createActions() {
     setUnifiedTitleAndToolBarOnMac(true);
     _toolbar->setMovable(false);
     _toolbar->setFloatable(false);
+    _toolbar->setIconSize(QSize(15,15)) ;
 
     _menuBar->addMenu(_menu);
     this->addToolBar(_toolbar);

@@ -1,5 +1,11 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>fileicon.png</file>
+        <file alias="add">icons/add.png</file>
+        <file alias="add@2x">icons/add@2x.png</file>
+        <file alias="file">icons/fileicon.png</file>
+        <file alias="remove">icons/remove.png</file>
+        <file alias="remove@2x">icons/remove@2x.png</file>
+        <file alias="search">icons/search.png</file>
+        <file alias="search@2x">icons/search@2x.png</file>
     </qresource>
 </RCC>

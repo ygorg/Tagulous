@@ -4,7 +4,7 @@ TagFile::TagFile(QString filePath)
     : QObject() {
     _filePath = filePath;
     _name = filePath.split("/", QString::SkipEmptyParts).last();
-    _icon = QIcon(":icons/fileicon.png");
+    _icon = QIcon(":icons/file");
     TagFile::newTagFile(this);
 }
 
