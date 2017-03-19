@@ -13,6 +13,34 @@
 
 #include "filelistmodel.h"
 
+
+class QListViewDrop : public QListView {
+    Q_OBJECT
+public:
+    QListViewDrop(QWidget *parent=0) : QListView(parent){
+        setAcceptDrops(true);
+    }
+    void dragEnterEvent(QDragEnterEvent *event) {
+        if (event->mimeData()->hasFormat("text/uri-list")) {
+            event->acceptProposedAction();
+        }
+
+    }
+    void dragMoveEvent(QDragMoveEvent *event) {
+        if (event->mimeData()->hasFormat("text/uri-list")) {
+            event->acceptProposedAction();
+        }
+    }
+    void dropEvent(QDropEvent *event)
+    {
+        emit requestAddFiles(event->mimeData()->urls());
+        event->acceptProposedAction();
+    }
+
+signals:
+    void requestAddFiles(QList<QUrl>);
+};
+
 class FileListWidget : public QWidget
 {
     Q_OBJECT
@@ -22,7 +50,7 @@ private:
     QVBoxLayout *_layout;
 
     QLineEdit *_searchBox;
-    QListView *_fileView;
+    QListViewDrop *_fileView;
 
     FileListModel *_fileListModel;
 public:
