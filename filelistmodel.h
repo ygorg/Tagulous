@@ -26,6 +26,9 @@ public:
     QHash<int,QByteArray>roleNames() const override;
 
 
+public slots:
+    void addFiles(QList<QUrl>);
+    void addFiles(QStringList);
 };
 
 #endif // FILELISTMODEL_H

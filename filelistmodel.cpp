@@ -89,4 +89,29 @@ Qt::ItemFlags FileListModel::flags(const QModelIndex &index) const {
     return QAbstractListModel::flags(index);
 }
 
+void FileListModel::addFiles(QList<QUrl> urls) {
+    int len = rowCount();
+    emit beginInsertRows(QModelIndex(), len, len + urls.length());
+
+    for (QUrl url : urls) {
+        for (Tag *tag : *_tagList) {
+            tag->append(TagFile::find(url.url()));
+        }
+    }
+
+    emit endInsertRows();
+}
+
+void FileListModel::addFiles(QStringList urls) {
+    int len = rowCount();
+    emit beginInsertRows(QModelIndex(), len, len + urls.length());
+
+    for (QString url : urls) {
+        for (Tag *tag : *_tagList) {
+            tag->append(TagFile::find(url));
+        }
+    }
+
+    emit endInsertRows();
+}
 
