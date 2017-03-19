@@ -1,7 +1,5 @@
 #include "filelistmodel.h"
 
-#include<QDebug>
-
 FileListModel::FileListModel(QList<Tag*> *list, QObject *parent)
     : QAbstractListModel(parent) {
     _tagList = list;

@@ -19,12 +19,11 @@ public:
     };
     FileListModel(QList<Tag*> *list, QObject *parent=0);
     FileListModel(Tag *tag, QObject *parent=0);
-    int rowCount(const QModelIndex &parent) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role) const override;
     bool removeRows(int row, int count, const QModelIndex &parent) override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     QHash<int,QByteArray>roleNames() const override;
-
 
 public slots:
     void addFiles(QList<QUrl>);
