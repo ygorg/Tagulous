@@ -10,6 +10,8 @@
 #include <QMap>
 #include <qsortfilterproxymodelfixed.h>
 #include <QAbstractItemModel>
+#include <QDebug>
+
 
 #include "taglistmodel.h"
 
@@ -36,6 +38,7 @@ signals:
     void viewFileList(int);
 
 public slots:
+    void addElement();
     void deleteElement();
     void copyElement();
     void pasteElement();

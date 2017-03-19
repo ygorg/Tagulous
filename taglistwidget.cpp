@@ -1,5 +1,4 @@
 #include "taglistwidget.h"
-#include <QDebug>
 
 TagListWidget::TagListWidget(TagListModel *tagListModel,
                              QMap<QString, QAction *> *actions,
@@ -46,7 +45,7 @@ void TagListWidget::connectActions() {
      * and/or the menu */
 
     connect(_actions->value("add"), SIGNAL(triggered(bool)),
-            _tagListModel, SLOT(requestedAddTag()));
+            this, SLOT(addElement()));
     emit toolBarAction("add");
 
 
@@ -76,6 +75,10 @@ void TagListWidget::connectActions() {
             this, SLOT(filterTags()));
     emit toolBarAction("filter");
 
+}
+
+void TagListWidget::addElement() {
+    _tagView->model()->insertRow(_tagView->model()->rowCount());
 }
 
 void TagListWidget::deleteElement() {
@@ -116,7 +119,6 @@ void TagListWidget::filterTags() {
 }
 
 void TagListWidget::doubleClicked(QModelIndex index) {
-    qDebug() << "DoubleClicked";
     if (!index.isValid()) {
         return;
     }
