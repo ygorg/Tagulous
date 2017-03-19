@@ -14,7 +14,15 @@ TagListWidget::TagListWidget(TagListModel *tagListModel,
     _searchBox = new QLineEdit();
     _searchBox->setPlaceholderText(tr("Search"));
 
-    _tagView->setModel(_tagListModel);
+    _proxyModel = new QSortFilterProxyModelFixed();
+    _proxyModel->setFilterRole(Qt::DisplayRole);
+    _proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    _proxyModel->setSourceModel(_tagListModel);
+
+    connect(_searchBox, SIGNAL(textChanged(QString)),
+            _proxyModel, SLOT(setFilterRegExp(QString)));
+
+    _tagView->setModel(_proxyModel);
     _tagView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     _tagView->setDragEnabled(true);
     _tagView->setAcceptDrops(true);
@@ -79,8 +87,7 @@ void TagListWidget::deleteElement() {
     QModelIndexList::reverse_iterator it;
 
     for(it = indexes.rbegin(); it != indexes.rend(); ++it) {
-        //delete tagList->at(index.row());
-        _tagListModel->removeRow(it->row(), it->parent());
+        _tagView->model()->removeRow(it->row(), it->parent());
     }
 }
 
@@ -121,4 +128,5 @@ TagListWidget::~TagListWidget() {
     delete _layout;
     delete _tagView;
     delete _searchBox;
+    delete _proxyModel;
 }

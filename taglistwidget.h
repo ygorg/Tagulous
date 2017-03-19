@@ -8,7 +8,7 @@
 #include <QMenuBar>
 #include <QAction>
 #include <QMap>
-
+#include <qsortfilterproxymodelfixed.h>
 #include <QAbstractItemModel>
 
 #include "taglistmodel.h"
@@ -25,6 +25,7 @@ private:
     QListView *_tagView;
 
     QAbstractItemModel *_tagListModel;
+    QSortFilterProxyModel *_proxyModel;
 public:
     explicit TagListWidget(TagListModel *, QMap<QString, QAction *> *, QWidget *parent=0);
     ~TagListWidget();
