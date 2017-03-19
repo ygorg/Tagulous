@@ -12,6 +12,7 @@ TagListWidget::TagListWidget(TagListModel *tagListModel,
     _tagView = new QListView;
     _searchBox = new QLineEdit();
     _searchBox->setPlaceholderText(tr("Search"));
+    _searchBox->setAttribute(Qt::WA_MacShowFocusRect, false);
 
     _proxyModel = new QSortFilterProxyModelFixed();
     _proxyModel->setFilterRole(Qt::DisplayRole);

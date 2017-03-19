@@ -10,6 +10,7 @@ FileListWidget::FileListWidget(QMap<QString, QAction *> *actions,
     _fileView = new QListViewDrop;
     _searchBox = new QLineEdit();
     _searchBox->setPlaceholderText(tr("Search"));
+    _searchBox->setAttribute(Qt::WA_MacShowFocusRect, false);
 
     _fileView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     _fileView->setDragEnabled(true);
