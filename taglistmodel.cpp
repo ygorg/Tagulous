@@ -42,8 +42,7 @@ bool TagListModel::setData(const QModelIndex &index,
     return false; /* On a pas modifié la valeur */
 }
 
-bool TagListModel::insertRows(int row, int count,
-                              const QModelIndex &parent) {
+Tag *TagListModel::newTag() {
     // couleurs :   orange :    253,148,38
     //              jaune :     254,203,47
     //              vert :      104,216,69
@@ -58,6 +57,15 @@ bool TagListModel::insertRows(int row, int count,
     static int defaultColorsIndex = 0;
     static int defaultColorsLength = 7;
 
+    Tag *tag = new Tag(tr("New Tag"));
+    tag->setBulletColor(defaultColors[defaultColorsIndex]);
+    defaultColorsIndex = (defaultColorsIndex + 1) % defaultColorsLength;
+    return tag;
+}
+
+bool TagListModel::insertRows(int row, int count,
+                              const QModelIndex &parent) {
+
     /* Ce qui se passe si on ajoute count ligne a l'indice row */
     if (row != rowCount()) {
         /* Si on veut ajouter une ligne pas a la fin on abort */
@@ -71,10 +79,7 @@ bool TagListModel::insertRows(int row, int count,
     emit beginInsertRows(parent, row, row+count);
     //et voilà ce qu'on fait vraiment
     for (int i = 0; i < count; i++) {
-        Tag *n_tag = new Tag("New Tag");
-        n_tag->setBulletColor(defaultColors[defaultColorsIndex]);
-        defaultColorsIndex = (defaultColorsIndex + 1) % defaultColorsLength;
-        _tags->append(n_tag);
+        _tags->append(newTag());
     }
     //c'est dans la doc de faire ça
     emit endInsertRows();
@@ -129,5 +134,5 @@ Qt::ItemFlags TagListModel::flags(const QModelIndex &index) const {
 }
 
 void TagListModel::requestedAddTag() {
-    insertRow(rowCount(QModelIndex()));
+    insertRow(rowCount());
 }

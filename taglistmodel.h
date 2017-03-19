@@ -7,7 +7,6 @@
 #include <QToolBar>
 #include <QHBoxLayout>
 #include <QMimeData>
-#include <QDebug>
 
 #include "taglist.h"
 
@@ -19,6 +18,8 @@ class TagListModel : public QAbstractListModel {
     Q_OBJECT
 protected:
     TagList *_tags;
+    Tag *newTag();
+
 public:
     TagListModel(TagList *tagList, QObject *parent);
 
