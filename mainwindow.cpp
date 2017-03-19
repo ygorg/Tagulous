@@ -4,9 +4,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
 
-    qDebug() << "TODO Add support for the search field\n"
-             << "TODO Add drag'n'drop support in FileListModel\n"
-             << "TODO Adding files to a Tag shall SIGNAL some dataChanged\n";
+    qDebug() << "BUG QSortFilterProxyModel::rowCount() is bugged so subclassing QAbstractProxyModel is needed...\n"
+                "FIX QFileDialog doesn't allow files adn dirs to be selected at the same time...";
 
     createActions();
 

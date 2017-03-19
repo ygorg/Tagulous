@@ -6,12 +6,12 @@
 #include <QString>
 #include <QStandardPaths>
 #include <QDir>
-#include <QDebug>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMap>
 #include <QMapIterator>
 #include <QStackedWidget>
+#include <QDebug>
 
 #include "taglist.h"
 #include "taglistmodel.h"
