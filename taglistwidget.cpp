@@ -26,7 +26,8 @@ TagListWidget::TagListWidget(QWidget *parent)
     _proxyModel = new QIdentityProxyModel();
     _view->setModel(_proxyModel);
 
-    _filterValidateButton = new QPushButton(tr("Ok"));
+    _filterValidateButton = new QToolButton;
+    _filterValidateButton->setText(tr("Ok"));
     _filterValidateButton->hide();
     connect(_filterValidateButton, SIGNAL(clicked(bool)),
             this, SLOT(requestedFilter()));
