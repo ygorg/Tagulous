@@ -25,6 +25,8 @@ public:
     QString getName();
     void setName(QString value);
 
+    void append(const QList<TagFile *> &t);
+    void append(TagFile * const &t);
     void insert(int i, TagFile *value);
     void removeAt(int i);
 };

@@ -42,7 +42,20 @@ void Tag::setName(QString value) {
  * Handshake with TagFile
  *****/
 
+void Tag::append(const QList<TagFile *> &t) {
+    for(TagFile *file : t) {
+        append(file);
+    }
+}
+
+void Tag::append(TagFile * const &t) {
+    insert(length(), t);
+}
+
 void Tag::insert(int i, TagFile *value) {
+    if (this->contains(value)) {
+        return;
+    }
     value->addParentTag(this);
     QList::insert(i, value);
 }
