@@ -52,6 +52,10 @@ QVariant FileListModel::data(const QModelIndex &index, int role) const {
             }
             length += tag->length();
         }
+    } else if (role == Qt::SizeHintRole) {
+        return QSize(10, 30);
+    } else if (role == Qt::FontRole) {
+        return QFont("", 12);
     }
     return QVariant();
 }

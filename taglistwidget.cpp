@@ -33,6 +33,8 @@ TagListWidget::TagListWidget(TagListModel *tagListModel,
             this, SLOT(doubleClicked(QModelIndex)));
 
     /* Defining the layout */
+    _layout->setSpacing(0);
+    _layout->setMargin(0);
     _layout->addWidget(_searchBox);
     _layout->addWidget(_tagView);
     this->setLayout(_layout);

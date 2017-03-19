@@ -15,8 +15,14 @@ int main(int argc, char *argv[])
                     "QListView:item:selected {"
                     "   background: rgb(200, 200, 200, 150);"
                     "   color: rgb(0, 0, 0);"
+                    "}"
+                    "QLineEdit {"
+                    "   margin: 5 10 5 10;"
                     "}");
     a.setAttribute(Qt::AA_UseHighDpiPixmaps);
+    a.setAttribute(Qt::AA_DontShowIconsInMenus);
+    a.setAttribute(Qt::AA_EnableHighDpiScaling);
+
     MainWindow w;
     w.setMinimumWidth(280);
     w.show();

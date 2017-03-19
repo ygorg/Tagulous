@@ -30,6 +30,8 @@ FileListWidget::FileListWidget(QMap<QString, QAction *> *actions,
             _proxyModel, SLOT(setFilterRegExp(QString)));
 
     /* Defining the layout */
+    _layout->setSpacing(0);
+    _layout->setMargin(0);
     _layout->addWidget(_searchBox);
     _layout->addWidget(_fileView);
 
