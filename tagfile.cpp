@@ -1,10 +1,14 @@
 #include "tagfile.h"
-
+#include <QDebug>
 TagFile::TagFile(QString filePath)
     : QObject() {
     _filePath = filePath;
     _name = filePath.split("/", QString::SkipEmptyParts).last();
-    _icon = QIcon(":icons/file");
+    if (getMimeType().name() == "inode/directory") {
+        _icon = QIcon(":icons/dir");
+    } else {
+        _icon = QIcon(":icons/file");
+    }
     TagFile::newTagFile(this);
 }
 

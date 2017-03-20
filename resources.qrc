@@ -7,5 +7,6 @@
         <file alias="remove@2x">icons/remove@2x.png</file>
         <file alias="search">icons/search.png</file>
         <file alias="search@2x">icons/search@2x.png</file>
+        <file alias="dir">icons/diricon.png</file>
     </qresource>
 </RCC>

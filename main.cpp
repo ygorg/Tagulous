@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     // Resizing the window for the toolbar not to be splitted
-    w.setMinimumWidth(280);
+    w.setMinimumWidth(285);
     w.setMinimumHeight(300);
     w.setGeometry(0, 0, 280, 500);
     w.show();

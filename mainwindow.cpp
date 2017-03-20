@@ -77,7 +77,7 @@ void MainWindow::createActions() {
 
 
     // FileListWidget specific actions
-    QAction *previousAction = new QAction(tr("Back"), this);
+    QAction *previousAction = new QAction(tr("Previous"), this);
     previousAction->setShortcut(QKeySequence::Back);
     _actions->insert("previous", previousAction);
 
@@ -187,6 +187,8 @@ void MainWindow::showTagList() {
     _toolbar->addAction(getAction("rename"));
     _toolbar->addAction(getAction("filter"));
 
+
+    setWindowTitle("Tagulous");
     // Showing tags
     _tagListWidget->connectActions(_actions);
     _stackedWidget->setCurrentWidget(_tagListWidget);
@@ -207,10 +209,17 @@ void MainWindow::showFileList(QModelIndexList *indexes) {
 
 
     // Creating a model with all the tagged file that we want to show
+    QString windowTitle;
     QList<Tag *> *lst = new QList<Tag *>;
     for (QModelIndex index : *indexes) {
         lst->append(_tagList->at(index.row()));
+        if (windowTitle == "") {
+            windowTitle += _tagList->at(index.row())->getName();
+        } else {
+            windowTitle += " - " + _tagList->at(index.row())->getName();
+        }
     }
+    setWindowTitle(windowTitle);
     delete indexes;
 
     FileListModel *m = new FileListModel(lst);
