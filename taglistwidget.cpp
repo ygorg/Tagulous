@@ -1,5 +1,5 @@
 #include "taglistwidget.h"
-#include <QIdentityProxyModel>
+
 TagListWidget::TagListWidget(QWidget *parent)
     : QWidget(parent) {
 
@@ -76,6 +76,8 @@ void TagListWidget::addElement() {
     // Add a new empty tag to the end of the list
     QAbstractItemModel *model = _view->model();
     model->insertRow(model->rowCount());
+    _view->edit(model->index(model->rowCount() - 1, 0));
+    _view->scrollTo(model->index(model->rowCount() - 1, 0));
 }
 
 void TagListWidget::deleteElement() {
