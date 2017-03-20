@@ -21,3 +21,5 @@ Application to tag files with any operating system. Using QT developped within a
 - Improve the persistance (using threads), distribute the toXML function in each class (TagList::toXML calls Tag::toXML)
 - TagListDrop and TagListCheckable should be decorators not inheritors
 - Implementing ctrl-z would be wonderful
+- Add a status bar at the bottom to display useful informations
+- When a tag is created is should be in edit mode directly
