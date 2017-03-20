@@ -4,7 +4,8 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    a.setStyleSheet("QListView {"
+    a.setStyleSheet(""
+                    "QListView {"
                     "   background-color: transparent;"
                     "   border: 0;"
                     "   font: 16pt;"

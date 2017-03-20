@@ -14,7 +14,6 @@
 #include <QDebug>
 
 #include <QPushButton>
-#include <QToolButton>
 
 #include "taglistmodeldropcheckable.h"
 
@@ -30,7 +29,7 @@ private:
     QLineEdit *_searchBox;
     QListView *_view;
 
-    QToolButton *_filterValidateButton;
+    QPushButton *_filterValidateButton;
     bool filterIsOn = false;
 public:
     explicit TagListWidget(QWidget *parent=0);
