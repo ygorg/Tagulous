@@ -19,7 +19,7 @@ QVariant TagListModel::data(const QModelIndex &index,
     /* role c'est en gros les options d'affichage genre pour changer
      * la police il faut renvoyer une police si le role c'est genre
      * Qt::DisplayFont (en vrai pas du tout mais c'est l'idée)*/
-    if (role == Qt::DisplayRole) {
+    if (role == Qt::DisplayRole || role == Qt::EditRole) {
         return _tags->at(index.row())->getName();
     } else if (role == Qt::DecorationRole) {
         return _tags->at(index.row())->getBullet();
@@ -32,10 +32,14 @@ QVariant TagListModel::data(const QModelIndex &index,
 bool TagListModel::setData(const QModelIndex &index,
                            const QVariant &value, int role) {
     /* Pareil que data mais pour set la valeur au lieu de la get */
-    if (role == Qt::EditRole && value != "") {
+    if (role == Qt::EditRole) {
         /* en gros si on modifie le nom d'un tag et qu'on le met a ""
          * ben on fait rien */
-        _tags->at(index.row())->setName(value.toString());
+        if (value.toString() == "") {
+            _tags->at(index.row())->setName("Tag");
+        } else {
+            _tags->at(index.row())->setName(value.toString());
+        }
         emit dataChanged(index, index);
         return true;
     }
