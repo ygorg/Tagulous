@@ -28,7 +28,11 @@ int main(int argc, char *argv[])
     // Resizing the window for the toolbar not to be splitted
     w.setMinimumWidth(285);
     w.setMinimumHeight(300);
+#ifdef Q_OS_MAC
     w.setGeometry(0, 0, 280, 500);
+#else
+    w.setGeometry(0, 31, 280, 500);
+#endif /* Q_OS_MAC */
     w.show();
 
     return a.exec();

@@ -37,12 +37,12 @@ private:
     // Helper widgets
     QStackedWidget *_stackedWidget = new QStackedWidget();
     QToolBar *_toolbar = new QToolBar(this);
-    QMenuBar *_menuBar = new QMenuBar(0);
+    QMenuBar *_menuBar;
     QMenu *_menu = new QMenu(tr("File"));
 
     // Actions
     QAction *getAction(QString);
-    QMap<QString, QAction *> *_actions = new QMap<QString, QAction *>;
+    QMap<QString, QAction *> *_actions = new (QMap<QString, QAction *>);
 
     // Used for persistance
     QString _path = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);

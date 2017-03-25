@@ -6,8 +6,8 @@
 #include <QIcon>
 #include <QAbstractListModel>
 
-#import "tag.h"
-#import "tagfile.h"
+#include "tag.h"
+#include "tagfile.h"
 
 class FileListModel : public QAbstractListModel {
     // A model representing tagged files

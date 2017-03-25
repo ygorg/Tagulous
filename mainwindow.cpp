@@ -103,6 +103,13 @@ void MainWindow::createActions() {
 
 
     //Initializing menu
+
+#ifdef Q_OS_MAC
+    _menuBar = new QMenuBar(0);
+#else
+    _menuBar = menuBar();
+#endif /* Q_OS_MAC */
+
     //Adding general actions to the menu
     _menu->addAction(addAction);
     _menu->addAction(copyAction);
