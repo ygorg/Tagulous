@@ -1,5 +1,7 @@
 #include "taglist.h"
 #include <QDebug>
+
+
 TagList::TagList()
     : QList<Tag *>()
 {}
@@ -88,15 +90,15 @@ void TagList::toXML(QXmlStreamWriter *writer) {
 }
 
 void TagList::init() {
-    Tag *tag = new Tag("Tag1");
+    Tag *tag = new Tag("Music");
     tag->setBulletColor(QColor(252, 61, 57));
     this->append(tag);
 
-    tag = new Tag("Tag2");
+    tag = new Tag("Film");
     tag->setBulletColor(QColor(104, 216, 69));
     this->append(tag);
 
-    tag = new Tag("Tag3");
+    tag = new Tag("Photos");
     tag->setBulletColor(QColor(42, 174, 245));
     this->append(tag);
 }
